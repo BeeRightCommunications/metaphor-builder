@@ -1,0 +1,1165 @@
+bash
+
+cat /home/claude/metaphor-v2/index.html
+Output
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metaphor Builder — Bee Right Communications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --purple: #7B3FA0;
+  --purple-light: #F3EAF9;
+  --purple-dark: #5C2D7A;
+  --orange: #F26B1D;
+  --orange-light: #FEF0E7;
+  --orange-dark: #C04E0A;
+  --honey: #F0A500;
+  --honey-light: #FDF5E0;
+  --charcoal: #3D3D3D;
+  --ink: #1C1A14;
+  --ink-mid: #4A4538;
+  --ink-light: #8A826F;
+  --cream: #FDFAF4;
+  --parchment: #F5EED8;
+  --white: #FFFFFF;
+  --border: rgba(30,25,10,0.11);
+  --shadow-sm: 0 1px 8px rgba(30,25,10,0.07);
+  --shadow: 0 2px 20px rgba(30,25,10,0.09);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── LOGIN ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  background: var(--purple-dark);
+}
+#login-screen.hidden { display: none; }
+
+.login-box {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 3rem 2rem 2.5rem;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+.login-logo {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 1.25rem;
+  display: block;
+  object-fit: contain;
+}
+.login-box h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--purple-dark);
+  margin-bottom: 0.2rem;
+}
+.login-box .tagline {
+  font-size: 0.75rem;
+  color: var(--ink-light);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+.login-box input[type="password"] {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  background: var(--cream);
+  margin-bottom: 0.85rem;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.login-box input[type="password"]:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(123,63,160,0.12);
+}
+.login-btn {
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--orange);
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.login-btn:hover { background: var(--orange-dark); }
+.login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.login-error { margin-top: 0.75rem; font-size: 0.82rem; color: #991B1B; min-height: 1.2em; }
+
+/* ── APP ── */
+#app { display: none; }
+#app.visible { display: block; }
+
+/* ── HEADER ── */
+header {
+  background: var(--purple-dark);
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: white;
+  padding: 3px;
+  flex-shrink: 0;
+}
+.header-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  letter-spacing: -0.01em;
+}
+.header-text p {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 300;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.logout-btn {
+  margin-left: auto;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.65);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.logout-btn:hover { background: rgba(255,255,255,0.18); color: white; }
+
+/* ── MODE TOGGLE ── */
+.mode-bar {
+  background: var(--purple-dark);
+  padding: 0 1.5rem 1rem;
+}
+.mode-toggle {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+}
+.mode-toggle input[type="radio"] { display: none; }
+.mode-toggle label {
+  flex: 1;
+  text-align: center;
+  padding: 0.6rem 0.5rem;
+  border-radius: 9px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: rgba(255,255,255,0.65);
+  font-weight: 400;
+  transition: all 0.18s;
+  line-height: 1.3;
+}
+.mode-toggle label span {
+  display: block;
+  font-size: 0.65rem;
+  opacity: 0.75;
+  margin-top: 1px;
+}
+.mode-toggle input[type="radio"]:checked + label {
+  background: white;
+  color: var(--purple-dark);
+  font-weight: 500;
+}
+.mode-toggle input[type="radio"]:checked + label span { opacity: 0.6; }
+
+/* ── LAYOUT ── */
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.75rem 1.25rem 4rem;
+}
+
+/* ── SECTION LABELS ── */
+.section-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s;
+}
+.card:focus-within { box-shadow: 0 0 0 2px rgba(123,63,160,0.2), var(--shadow-sm); }
+
+/* ── FORM ELEMENTS ── */
+label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-mid);
+  margin-bottom: 0.35rem;
+}
+.hint {
+  font-size: 0.7rem;
+  color: var(--ink-light);
+  margin-top: -0.2rem;
+  margin-bottom: 0.5rem;
+  font-style: italic;
+}
+input[type="text"], textarea, select {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  color: var(--ink);
+  background: var(--cream);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="text"]:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(123,63,160,0.1);
+  background: white;
+}
+textarea { resize: vertical; min-height: 80px; }
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234A4538' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  padding-right: 2.25rem;
+}
+.field-group { margin-bottom: 1.1rem; }
+.field-group:last-child { margin-bottom: 0; }
+
+/* ── VAK TOGGLE ── */
+.vak-group {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+.vak-group input[type="radio"] { display: none; }
+.vak-group label {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  background: var(--cream);
+  color: var(--ink-mid);
+  margin: 0;
+  transition: all 0.15s;
+  line-height: 1.3;
+}
+.vak-group label span {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--ink-light);
+  margin-top: 1px;
+}
+.vak-group input[type="radio"]:checked + label {
+  background: var(--purple-light);
+  border-color: var(--purple);
+  color: var(--purple-dark);
+  font-weight: 500;
+}
+
+/* ── PILL TOGGLES ── */
+.toggle-group { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.4rem; }
+.toggle-pill { display: none; }
+.toggle-pill + label {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  cursor: pointer;
+  background: var(--cream);
+  color: var(--ink-mid);
+  margin: 0;
+  transition: all 0.15s;
+}
+.toggle-pill:checked + label {
+  background: var(--purple-light);
+  border-color: var(--purple);
+  color: var(--purple-dark);
+  font-weight: 500;
+}
+
+/* ── SEGMENT CONTROL ── */
+.seg-control {
+  display: flex;
+  background: var(--parchment);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 3px;
+  margin-top: 0.4rem;
+}
+.seg-control input[type="radio"] { display: none; }
+.seg-control label {
+  flex: 1;
+  text-align: center;
+  padding: 0.45rem 0.35rem;
+  border-radius: 7px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--ink-mid);
+  margin: 0;
+  font-weight: 400;
+  transition: all 0.15s;
+}
+.seg-control input[type="radio"]:checked + label {
+  background: white;
+  color: var(--ink);
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── GORDIAN BANNER ── */
+#gordian-banner {
+  display: none;
+  background: var(--purple-light);
+  border: 1px solid rgba(123,63,160,0.25);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+#gordian-banner.visible { display: flex; }
+.gordian-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+.gordian-banner-text p {
+  font-size: 0.82rem;
+  color: var(--purple-dark);
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+.gordian-banner-text span {
+  font-size: 0.75rem;
+  color: var(--ink-mid);
+}
+.gordian-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; }
+.gordian-yes, .gordian-no {
+  padding: 0.3rem 0.85rem;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.15s;
+}
+.gordian-yes {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: white;
+}
+.gordian-yes:hover { background: var(--purple-dark); }
+.gordian-no {
+  background: transparent;
+  border-color: rgba(123,63,160,0.3);
+  color: var(--purple-dark);
+}
+.gordian-no:hover { background: rgba(123,63,160,0.08); }
+
+/* ── GENERATE BUTTON ── */
+.generate-btn {
+  width: 100%;
+  padding: 0.95rem;
+  background: var(--orange);
+  border: none;
+  border-radius: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+.generate-btn:hover {
+  background: var(--orange-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(194,78,10,0.28);
+}
+.generate-btn:active { transform: translateY(0); }
+.generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── FULL MODE HIDDEN ── */
+.full-only { display: none; }
+body.full-mode .full-only { display: block; }
+body.full-mode .quick-only { display: none; }
+
+/* ── OUTPUT ── */
+#output-section { display: none; margin-top: 2rem; }
+#output-section.visible { display: block; animation: fadeUp 0.4s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.metaphor-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.metaphor-card-header {
+  background: var(--purple-dark);
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.metaphor-card-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: white;
+  font-style: italic;
+}
+.distinction-badge {
+  font-size: 0.65rem;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
+  padding: 0.2rem 0.65rem;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.metaphor-body { padding: 1.25rem 1.25rem 1rem; }
+.metaphor-text { font-size: 0.9rem; line-height: 1.85; color: var(--ink); white-space: pre-wrap; }
+.sub-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border);
+}
+.sub-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.5rem;
+}
+.hypnotic-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.95;
+  color: var(--ink-mid);
+  white-space: pre-wrap;
+}
+.gordian-text { font-size: 0.83rem; line-height: 1.7; color: var(--ink-mid); }
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--purple);
+  background: none;
+  border: 1px solid rgba(123,63,160,0.25);
+  border-radius: 8px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  margin-top: 0.85rem;
+}
+.copy-btn:hover { background: var(--purple-light); border-color: var(--purple); }
+
+/* ── THERAPIST NOTE ── */
+.therapist-note {
+  background: var(--honey-light);
+  border: 1px solid rgba(240,165,0,0.25);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.therapist-note .sub-label { color: var(--honey); }
+.therapist-note p { font-size: 0.86rem; color: var(--ink-mid); line-height: 1.75; }
+
+/* ── LOADING ── */
+.loading-state { text-align: center; padding: 2.5rem 1rem; }
+.spinner {
+  width: 32px; height: 32px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  margin: 0 auto 0.85rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-state p { color: var(--ink-light); font-size: 0.82rem; }
+
+/* ── ERROR ── */
+.error-box {
+  background: #FEF2F2; border: 1px solid #FECACA;
+  border-radius: 12px; padding: 1rem 1.25rem;
+  color: #991B1B; font-size: 0.83rem;
+}
+
+/* ── RESET ── */
+.reset-link { text-align: center; margin-top: 1.25rem; }
+.reset-link button {
+  background: none; border: none; color: var(--orange-dark);
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+  cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 480px) {
+  .container { padding: 1.25rem 1rem 3rem; }
+  .card { padding: 1.1rem; }
+  .metaphor-card-header { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  .vak-group label span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <img src="https://raw.githubusercontent.com/BeeRightCommunications/metaphor-builder/main/logo.png"
+         alt="Bee Right Communications" class="login-logo"
+         onerror="this.style.display='none'; document.getElementById('login-fallback').style.display='block'">
+    <div id="login-fallback" style="display:none; font-size:52px; margin-bottom:1rem">🐝</div>
+    <h1>Metaphor Builder</h1>
+    <p class="tagline">Bee Right Communications</p>
+    <input type="password" id="password-input" placeholder="Enter your password" autocomplete="current-password">
+    <button class="login-btn" id="login-btn" onclick="checkPassword()">Enter</button>
+    <p class="login-error" id="login-error"></p>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+  <header>
+    <img src="https://raw.githubusercontent.com/BeeRightCommunications/metaphor-builder/main/logo.png"
+         alt="Bee Right" class="header-logo"
+         onerror="this.style.display='none'">
+    <div class="header-text">
+      <h1>Metaphor Builder</h1>
+      <p>Bee Right Communications</p>
+    </div>
+    <button class="logout-btn" onclick="logout()">Log out</button>
+  </header>
+
+  <!-- ── MODE TOGGLE ── -->
+  <div class="mode-bar">
+    <div class="mode-toggle" style="max-width:600px; margin:0 auto;">
+      <input type="radio" name="mode" id="mode-quick" value="quick" checked onchange="setMode('quick')">
+      <label for="mode-quick">
+        ⚡ Quick mode
+        <span>In-session · 3 fields</span>
+      </label>
+      <input type="radio" name="mode" id="mode-full" value="full" onchange="setMode('full')">
+      <label for="mode-full">
+        📋 Full mode
+        <span>Pre/post-session · detailed</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ── GORDIAN DETECTION BANNER ── -->
+    <div id="gordian-banner">
+      <div class="gordian-icon">🧠</div>
+      <div class="gordian-banner-text">
+        <p>Gordian Model detected</p>
+        <span>It looks like you may use the Gordian Model. Would you like metaphors that include Gordian language and distinctions?</span>
+        <div class="gordian-actions">
+          <button class="gordian-yes" onclick="setGordian(true)">Yes please</button>
+          <button class="gordian-no" onclick="setGordian(false)">No thanks</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         QUICK MODE FIELDS
+    ══════════════════════════════════ -->
+
+    <!-- Quick: Client snapshot -->
+    <div class="quick-only">
+      <div class="section-label">Client snapshot</div>
+      <div class="card">
+        <div class="field-group">
+          <label>What's this client into?</label>
+          <p class="hint">Hobbies, job, sport, passions — anything from their world</p>
+          <input type="text" id="q-interests" placeholder="e.g. AFL, fishing, nursing, motorbikes…" oninput="detectGordian()">
+        </div>
+        <div class="field-group">
+          <label>What are they struggling with?</label>
+          <textarea id="q-issue" rows="3" placeholder="e.g. Can't set limits without guilt. Exhausted but unable to say no…" oninput="detectGordian()"></textarea>
+        </div>
+        <div class="field-group">
+          <label>What's the goal?</label>
+          <input type="text" id="q-goal" placeholder="e.g. Feel at peace with their own limits…" oninput="detectGordian()">
+        </div>
+      </div>
+
+      <!-- Quick: VAK -->
+      <div class="section-label">How do they experience their world?</div>
+      <div class="card">
+        <label>Client's representational system</label>
+        <p class="hint">How do they mostly talk about things? Pick the closest — or leave on Auto</p>
+        <div class="vak-group">
+          <input type="radio" name="q-vak" id="q-vak-auto" value="auto" checked>
+          <label for="q-vak-auto">Auto<span>Let AI decide</span></label>
+
+          <input type="radio" name="q-vak" id="q-vak-v" value="visual">
+          <label for="q-vak-v">Visual<span>"I see what you mean"</span></label>
+
+          <input type="radio" name="q-vak" id="q-vak-a" value="auditory">
+          <label for="q-vak-a">Auditory<span>"That rings a bell"</span></label>
+
+          <input type="radio" name="q-vak" id="q-vak-k" value="kinesthetic">
+          <label for="q-vak-k">Feeling<span>"I can't grasp it"</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         FULL MODE FIELDS
+    ══════════════════════════════════ -->
+
+    <div class="full-only">
+      <!-- Client's world -->
+      <div class="section-label">Client's world</div>
+      <div class="card">
+        <div class="field-group">
+          <label>Hobbies, interests & passions</label>
+          <p class="hint">e.g. fishing, cooking, AFL, hiking, cars, gardening, gaming</p>
+          <input type="text" id="f-interests" placeholder="Fishing, AFL, woodworking…" oninput="detectGordian()">
+        </div>
+        <div class="field-group">
+          <label>Occupation or work life</label>
+          <input type="text" id="f-occupation" placeholder="e.g. nurse, tradie, teacher, retired…" oninput="detectGordian()">
+        </div>
+        <div class="field-group">
+          <label>Favourite movies, shows, music or books</label>
+          <p class="hint">Great source material for metaphor imagery</p>
+          <input type="text" id="f-media" placeholder="e.g. The Shawshank Redemption, country music, true crime…">
+        </div>
+        <div class="field-group">
+          <label>Family or relationship context</label>
+          <p class="hint">Optional — only what's therapeutically relevant</p>
+          <input type="text" id="f-family" placeholder="e.g. father of 3, recently divorced, carer for parent…">
+        </div>
+      </div>
+
+      <!-- Presenting issue -->
+      <div class="section-label">Presenting issue & goal</div>
+      <div class="card">
+        <div class="field-group">
+          <label>What is the client struggling with?</label>
+          <p class="hint">The more specific, the better the metaphor</p>
+          <textarea id="f-issue" placeholder="e.g. Cannot say no to people at work. Feels guilty every time he sets a boundary…" oninput="detectGordian()"></textarea>
+        </div>
+        <div class="field-group">
+          <label>Goal or desired state</label>
+          <input type="text" id="f-goal" placeholder="e.g. Able to decline requests without guilt…">
+        </div>
+      </div>
+
+      <!-- Structural mapping -->
+      <div class="section-label">Structural mapping (optional)</div>
+      <div class="card">
+        <p class="hint" style="margin-bottom:0.75rem;">Map the four structural elements — this helps the AI build an isomorphic metaphor. Leave blank to let it infer from the issue.</p>
+        <div class="field-group">
+          <label>The obstacle</label>
+          <input type="text" id="f-obstacle" placeholder="What kind of difficulty is it — internal, relational, situational?">
+        </div>
+        <div class="field-group">
+          <label>The resource needed</label>
+          <input type="text" id="f-resource" placeholder="What capacity, insight, or support would resolve it?">
+        </div>
+        <div class="field-group">
+          <label>The turning point</label>
+          <input type="text" id="f-turning" placeholder="What shifts — a realisation, an action, an external event?">
+        </div>
+        <div class="field-group">
+          <label>The resolution</label>
+          <input type="text" id="f-resolution" placeholder="What does 'better' look like, concretely?">
+        </div>
+      </div>
+
+      <!-- Pattern / distinction -->
+      <div class="section-label">Pattern or distinction (optional)</div>
+      <div class="card">
+        <div class="field-group">
+          <label>Identified distortion, pattern, or pillar</label>
+          <p class="hint">Leave blank to let the app identify it</p>
+          <input type="text" id="f-pattern" placeholder="e.g. Influence is not control / Unknown is not unsafe…" oninput="detectGordian()">
+        </div>
+        <div class="field-group">
+          <label>Key distinctions to target</label>
+          <div class="toggle-group">
+            <input type="checkbox" class="toggle-pill" id="fd1" name="f-distinctions" value="Behaviour is not identity">
+            <label for="fd1">Behaviour ≠ identity</label>
+            <input type="checkbox" class="toggle-pill" id="fd2" name="f-distinctions" value="Feeling is not fact">
+            <label for="fd2">Feeling ≠ fact</label>
+            <input type="checkbox" class="toggle-pill" id="fd3" name="f-distinctions" value="Influence is not control">
+            <label for="fd3">Influence ≠ control</label>
+            <input type="checkbox" class="toggle-pill" id="fd4" name="f-distinctions" value="Discomfort is not danger">
+            <label for="fd4">Discomfort ≠ danger</label>
+            <input type="checkbox" class="toggle-pill" id="fd5" name="f-distinctions" value="Unknown is not unsafe">
+            <label for="fd5">Unknown ≠ unsafe</label>
+            <input type="checkbox" class="toggle-pill" id="fd6" name="f-distinctions" value="Specific is not universal">
+            <label for="fd6">Specific ≠ universal</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full: VAK -->
+      <div class="section-label">Representational system</div>
+      <div class="card">
+        <label>How does this client mostly experience and describe their world?</label>
+        <p class="hint">Listen for the words they use — see/look, hear/sounds, feel/grasp</p>
+        <div class="vak-group">
+          <input type="radio" name="f-vak" id="f-vak-auto" value="auto" checked>
+          <label for="f-vak-auto">Auto<span>Let AI decide</span></label>
+          <input type="radio" name="f-vak" id="f-vak-v" value="visual">
+          <label for="f-vak-v">Visual<span>"I see what you mean"</span></label>
+          <input type="radio" name="f-vak" id="f-vak-a" value="auditory">
+          <label for="f-vak-a">Auditory<span>"That rings a bell"</span></label>
+          <input type="radio" name="f-vak" id="f-vak-k" value="kinesthetic">
+          <label for="f-vak-k">Feeling<span>"I can't grasp it"</span></label>
+        </div>
+      </div>
+
+      <!-- Output preferences -->
+      <div class="section-label">Output preferences</div>
+      <div class="card">
+        <div class="field-group">
+          <label>Displacement framing</label>
+          <p class="hint">How should the metaphor be introduced?</p>
+          <select id="f-displacement">
+            <option value="direct">Direct — speak to the client directly</option>
+            <option value="friend" selected>"I once worked with someone who…"</option>
+            <option value="myfriend">"I have a friend who…" (My Friend John style)</option>
+            <option value="heard">"I once heard about someone who…"</option>
+            <option value="story">"There's a story about…"</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Language complexity</label>
+          <div class="seg-control">
+            <input type="radio" name="f-complexity" id="fc-accessible" value="accessible">
+            <label for="fc-accessible">Accessible</label>
+            <input type="radio" name="f-complexity" id="fc-moderate" value="moderate" checked>
+            <label for="fc-moderate">Moderate</label>
+            <input type="radio" name="f-complexity" id="fc-rich" value="rich">
+            <label for="fc-rich">Rich & layered</label>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Include hypnotic induction version?</label>
+          <div class="seg-control">
+            <input type="radio" name="f-hypnotic" id="fh-yes" value="yes" checked>
+            <label for="fh-yes">Yes — ready to use</label>
+            <input type="radio" name="f-hypnotic" id="fh-no" value="no">
+            <label for="fh-no">Metaphor only</label>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Number of metaphors</label>
+          <div class="seg-control">
+            <input type="radio" name="f-count" id="fc1" value="1">
+            <label for="fc1">1</label>
+            <input type="radio" name="f-count" id="fc2" value="2" checked>
+            <label for="fc2">2</label>
+            <input type="radio" name="f-count" id="fc3" value="3">
+            <label for="fc3">3</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GENERATE ── -->
+    <button class="generate-btn" id="generateBtn" onclick="generateMetaphors()">
+      ✦ Generate metaphors
+    </button>
+
+    <!-- ── OUTPUT ── -->
+    <div id="output-section">
+      <div class="section-label" style="margin-top:0.25rem;">Your metaphors</div>
+      <div id="output-content"></div>
+      <div class="reset-link">
+        <button onclick="resetOutput()">← New client</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ── STATE ── */
+let gordianActive = false;
+let gordianDismissed = false;
+
+/* ── PASSWORD ── */
+document.getElementById('password-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkPassword();
+});
+
+async function checkPassword() {
+  const input = document.getElementById('password-input');
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  const pw = input.value.trim();
+  if (!pw) return;
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+  err.textContent = '';
+  try {
+    const res = await fetch('/api/password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+    if (res.ok) {
+      sessionStorage.setItem('mb_auth', '1');
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('app').classList.add('visible');
+    } else {
+      err.textContent = 'Incorrect password. Please try again.';
+      input.value = '';
+      input.focus();
+    }
+  } catch {
+    err.textContent = 'Connection error. Please try again.';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Enter';
+}
+
+function logout() {
+  sessionStorage.removeItem('mb_auth');
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('password-input').value = '';
+}
+
+if (sessionStorage.getItem('mb_auth') === '1') {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+}
+
+/* ── MODE SWITCH ── */
+function setMode(mode) {
+  if (mode === 'full') {
+    document.body.classList.add('full-mode');
+  } else {
+    document.body.classList.remove('full-mode');
+  }
+  resetOutput();
+}
+
+/* ── GORDIAN DETECTION ── */
+const GORDIAN_WORDS = [
+  'gordian', 'gordian model', 'pillar', 'pillars', 'distortion',
+  'distortions', 'iap', 'primary emotion', 'secondary construct',
+  'distinction work', 'gordian language'
+];
+
+function detectGordian() {
+  if (gordianDismissed) return;
+  const fields = ['q-interests','q-issue','q-goal','f-interests','f-occupation','f-issue','f-goal','f-pattern'];
+  const allText = fields.map(id => (document.getElementById(id)?.value || '')).join(' ').toLowerCase();
+  const found = GORDIAN_WORDS.some(w => allText.includes(w));
+  const banner = document.getElementById('gordian-banner');
+  if (found && !gordianActive) {
+    banner.classList.add('visible');
+  } else if (!found && !gordianActive) {
+    banner.classList.remove('visible');
+  }
+}
+
+function setGordian(yes) {
+  gordianActive = yes;
+  gordianDismissed = true;
+  document.getElementById('gordian-banner').classList.remove('visible');
+}
+
+/* ── BUILD USER MESSAGE ── */
+function buildMessage() {
+  const isFullMode = document.body.classList.contains('full-mode');
+
+  if (!isFullMode) {
+    // QUICK MODE
+    const interests = document.getElementById('q-interests').value.trim();
+    const issue = document.getElementById('q-issue').value.trim();
+    const goal = document.getElementById('q-goal').value.trim();
+    const vak = document.querySelector('input[name="q-vak"]:checked').value;
+
+    if (!issue) { alert("Please describe what the client is struggling with."); return null; }
+
+    return `MODE: Quick (in-session)
+
+CLIENT SNAPSHOT:
+- Interests/world: ${interests || 'Not provided'}
+- Presenting issue: ${issue}
+- Goal: ${goal || 'Not specified'}
+
+REPRESENTATIONAL SYSTEM: ${vak === 'auto' ? 'Auto-detect from context' : vak}
+HYPNOTIC VERSION: Yes
+DISPLACEMENT FRAMING: "I once worked with someone who…"
+LANGUAGE COMPLEXITY: accessible to moderate
+NUMBER OF METAPHORS: 1
+GORDIAN LANGUAGE: ${gordianActive ? 'Yes' : 'No'}
+
+Generate 1 immediately usable metaphor. Keep it concise — it needs to be speakable in session within 90 seconds. Respond in JSON only.`;
+
+  } else {
+    // FULL MODE
+    const interests  = document.getElementById('f-interests').value.trim();
+    const occupation = document.getElementById('f-occupation').value.trim();
+    const media      = document.getElementById('f-media').value.trim();
+    const family     = document.getElementById('f-family').value.trim();
+    const issue      = document.getElementById('f-issue').value.trim();
+    const goal       = document.getElementById('f-goal').value.trim();
+    const obstacle   = document.getElementById('f-obstacle').value.trim();
+    const resource   = document.getElementById('f-resource').value.trim();
+    const turning    = document.getElementById('f-turning').value.trim();
+    const resolution = document.getElementById('f-resolution').value.trim();
+    const pattern    = document.getElementById('f-pattern').value.trim();
+    const vak        = document.querySelector('input[name="f-vak"]:checked').value;
+    const displacement = document.getElementById('f-displacement').value;
+    const complexity = document.querySelector('input[name="f-complexity"]:checked').value;
+    const hypnotic   = document.querySelector('input[name="f-hypnotic"]:checked').value;
+    const count      = document.querySelector('input[name="f-count"]:checked').value;
+    const distinctions = Array.from(document.querySelectorAll('input[name="f-distinctions"]:checked')).map(e => e.value);
+
+    if (!issue) { alert("Please describe what the client is struggling with."); return null; }
+
+    const structural = (obstacle || resource || turning || resolution)
+      ? `\nSTRUCTURAL MAPPING:\n- Obstacle: ${obstacle || 'not specified'}\n- Resource needed: ${resource || 'not specified'}\n- Turning point: ${turning || 'not specified'}\n- Resolution: ${resolution || 'not specified'}`
+      : '';
+
+    return `MODE: Full (pre/post-session)
+
+CLIENT PROFILE:
+- Interests/hobbies: ${interests || 'Not provided'}
+- Occupation: ${occupation || 'Not provided'}
+- Favourite media: ${media || 'Not provided'}
+- Family/relationship context: ${family || 'Not provided'}
+
+PRESENTING ISSUE: ${issue}
+GOAL: ${goal || 'Not specified'}
+${structural}
+
+PATTERN OR PILLAR: ${pattern || 'Please identify from the presenting issue'}
+DISTINCTIONS TO TARGET: ${distinctions.length > 0 ? distinctions.join(', ') : 'Please identify the most relevant from the issue'}
+
+REPRESENTATIONAL SYSTEM: ${vak === 'auto' ? 'Auto-detect from context' : vak}
+DISPLACEMENT FRAMING: ${displacement}
+LANGUAGE COMPLEXITY: ${complexity}
+HYPNOTIC VERSION: ${hypnotic === 'yes' ? 'Yes' : 'No'}
+NUMBER OF METAPHORS: ${count}
+GORDIAN LANGUAGE: ${gordianActive ? 'Yes' : 'No'}
+
+Respond in JSON only.`;
+  }
+}
+
+/* ── GENERATE ── */
+async function generateMetaphors() {
+  const userMessage = buildMessage();
+  if (!userMessage) return;
+
+  const isFullMode = document.body.classList.contains('full-mode');
+  const hypnotic = isFullMode
+    ? document.querySelector('input[name="f-hypnotic"]:checked').value
+    : 'yes';
+
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.textContent = 'Building metaphors…';
+
+  const outputSection = document.getElementById('output-section');
+  const outputContent = document.getElementById('output-content');
+  outputSection.classList.remove('visible');
+  outputContent.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Weaving metaphors from the client's world…</p></div>`;
+  outputSection.classList.add('visible');
+  outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userMessage, mode: isFullMode ? 'full' : 'quick' })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || `Server error ${response.status}`);
+    }
+
+    const data = await response.json();
+    const raw = data.content.map(b => b.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    renderOutput(parsed, hypnotic);
+
+  } catch (err) {
+    outputContent.innerHTML = `<div class="error-box"><strong>Something went wrong:</strong> ${err.message}<br><br>Please try again. If it keeps happening, reload the page.</div>`;
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✦ Generate metaphors';
+}
+
+/* ── RENDER OUTPUT ── */
+function renderOutput(data, hypnotic) {
+  const outputContent = document.getElementById('output-content');
+  let html = '';
+
+  if (data.therapist_note) {
+    html += `<div class="therapist-note">
+      <p class="sub-label">🗒 Therapist note</p>
+      <p>${escHtml(data.therapist_note)}</p>
+    </div>`;
+  }
+
+  data.metaphors.forEach(m => {
+    const fullText = (m.metaphor || '') + (m.hypnotic_version ? '\n\n— Hypnotic version —\n\n' + m.hypnotic_version : '');
+
+    html += `<div class="metaphor-card">
+      <div class="metaphor-card-header">
+        <h3>${escHtml(m.title)}</h3>
+        <span class="distinction-badge">${escHtml(m.distinction)}</span>
+      </div>
+      <div class="metaphor-body">
+        <div class="metaphor-text">${escHtml(m.metaphor)}</div>`;
+
+    if (hypnotic === 'yes' && m.hypnotic_version) {
+      html += `<div class="sub-section">
+        <p class="sub-label">🎙 Hypnotic version — ready for session</p>
+        <div class="hypnotic-text">${escHtml(m.hypnotic_version)}</div>
+      </div>`;
+    }
+
+    if (gordianActive && m.gordian_note) {
+      html += `<div class="sub-section">
+        <p class="sub-label">📐 Gordian model note</p>
+        <div class="gordian-text">${escHtml(m.gordian_note)}</div>
+      </div>`;
+    }
+
+    html += `<button class="copy-btn" data-text="${escAttr(fullText)}" onclick="copyText(this)">
+        📋 Copy to clipboard
+      </button>
+    </div></div>`;
+  });
+
+  outputContent.innerHTML = html;
+}
+
+/* ── HELPERS ── */
+function copyText(btn) {
+  const text = btn.getAttribute('data-text');
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = orig, 2000);
+  });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function escAttr(str) {
+  if (!str) return '';
+  return str.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function resetOutput() {
+  const s = document.getElementById('output-section');
+  s.classList.remove('visible');
+}
+</script>
+</body>
+</html>
+
