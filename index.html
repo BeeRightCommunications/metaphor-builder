@@ -122,6 +122,29 @@ body {
 .login-btn:hover { background: var(--orange-dark); }
 .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .login-error { margin-top: 0.75rem; font-size: 0.82rem; color: #991B1B; min-height: 1.2em; }
+.login-description {
+  font-size: 0.82rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  text-align: left;
+}
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+.login-feature {
+  font-size: 0.78rem;
+  color: var(--ink-mid);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+.login-feature span { color: var(--ink); }
 
 /* ── APP ── */
 #app { display: none; }
@@ -384,6 +407,87 @@ select {
   box-shadow: var(--shadow-sm);
 }
 
+/* ── WELCOME BANNER ── */
+#welcome-banner {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+#welcome-banner.hidden { display: none; }
+.welcome-inner { padding: 1.25rem 1.5rem; }
+.welcome-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+.welcome-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--purple-dark);
+}
+.welcome-close {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  color: var(--ink-light);
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.welcome-close:hover { background: var(--parchment); color: var(--ink); }
+.welcome-body {
+  font-size: 0.82rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.welcome-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.1rem;
+}
+.welcome-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--ink-mid);
+  line-height: 1.5;
+}
+.welcome-num {
+  background: var(--purple);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 600;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.welcome-dismiss {
+  width: 100%;
+  padding: 0.65rem;
+  background: var(--orange);
+  border: none;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.welcome-dismiss:hover { background: var(--orange-dark); }
+
 /* ── GORDIAN BANNER ── */
 #gordian-banner {
   display: none;
@@ -603,6 +707,13 @@ body.full-mode .quick-only { display: none; }
     <div id="login-fallback" style="display:none; font-size:52px; margin-bottom:1rem">🐝</div>
     <h1>Metaphor Builder</h1>
     <p class="tagline">Bee Right Communications</p>
+    <p class="login-description">Generate deeply personalised therapeutic metaphors for your clients — built from their world, ready to use in session.</p>
+    <div class="login-features">
+      <div class="login-feature">— <span>Quick Mode — in-session in under 30 seconds</span></div>
+      <div class="login-feature">— <span>Full Mode — rich prep for upcoming sessions</span></div>
+      <div class="login-feature">— <span>Hypnotic versions ready to speak aloud</span></div>
+      <div class="login-feature">— <span>Conversational versions to plant the seed before trance</span></div>
+    </div>
     <input type="password" id="password-input" placeholder="Enter your password" autocomplete="current-password">
     <button class="login-btn" id="login-btn" onclick="checkPassword()">Enter</button>
     <p class="login-error" id="login-error"></p>
@@ -627,12 +738,12 @@ body.full-mode .quick-only { display: none; }
     <div class="mode-toggle" style="max-width:600px; margin:0 auto;">
       <input type="radio" name="mode" id="mode-quick" value="quick" checked onchange="setMode('quick')">
       <label for="mode-quick">
-        ⚡ Quick mode
+        Quick mode
         <span>In-session · 3 fields</span>
       </label>
       <input type="radio" name="mode" id="mode-full" value="full" onchange="setMode('full')">
       <label for="mode-full">
-        📋 Full mode
+        Full mode
         <span>Pre/post-session · detailed</span>
       </label>
     </div>
@@ -640,9 +751,43 @@ body.full-mode .quick-only { display: none; }
 
   <div class="container">
 
+    <!-- ── WELCOME BANNER ── -->
+    <div id="welcome-banner">
+      <div class="welcome-inner">
+        <div class="welcome-top">
+          <p class="welcome-title">How to use the Metaphor Builder</p>
+          <button class="welcome-close" onclick="dismissWelcome()">✕</button>
+        </div>
+        <p class="welcome-body">This tool generates personalised therapeutic metaphors drawn from your client's own world — their hobbies, job, language and life experience. The more specific your input, the more targeted the output.</p>
+        <div class="welcome-steps">
+          <div class="welcome-step">
+            <span class="welcome-num">1</span>
+            <span><strong>Quick Mode</strong> — designed for use during a session. Fill in three fields and get one ready-to-use metaphor in seconds.</span>
+          </div>
+          <div class="welcome-step">
+            <span class="welcome-num">2</span>
+            <span><strong>Full Mode</strong> — designed for pre or post-session preparation. Add more detail for richer, more structurally targeted output.</span>
+          </div>
+          <div class="welcome-step">
+            <span class="welcome-num">3</span>
+            <span><strong>Conversational version</strong> — use this naturally in the session before hypnosis. It works by slipping past the conscious mind and planting the idea at a deeper level, so that when the hypnotic version is delivered during trance, it reinforces what has already begun to take root.</span>
+          </div>
+          <div class="welcome-step">
+            <span class="welcome-num">4</span>
+            <span><strong>Hypnotic version</strong> — designed to be read aloud during trance, deepening and reinforcing the metaphor introduced in conversation.</span>
+          </div>
+          <div class="welcome-step">
+            <span class="welcome-num">5</span>
+            <span><strong>These are guides, not scripts.</strong> Adapt the language freely to suit your client, your therapeutic style, and the moment. The metaphors are a starting point — your clinical judgment shapes how they are used.</span>
+          </div>
+        </div>
+        <button class="welcome-dismiss" onclick="dismissWelcome()">Got it — start building</button>
+      </div>
+    </div>
+
     <!-- ── GORDIAN DETECTION BANNER ── -->
     <div id="gordian-banner">
-      <div class="gordian-icon">🧠</div>
+      <div class="gordian-icon" style="font-size:1.1rem; color: var(--purple);">&#9670;</div>
       <div class="gordian-banner-text">
         <p>Gordian Model detected</p>
         <span>It looks like you may use the Gordian Model. Would you like metaphors that include Gordian language and distinctions?</span>
@@ -924,6 +1069,16 @@ if (sessionStorage.getItem('mb_auth') === '1') {
   document.getElementById('app').classList.add('visible');
 }
 
+/* ── WELCOME BANNER ── */
+function dismissWelcome() {
+  document.getElementById('welcome-banner').classList.add('hidden');
+  sessionStorage.setItem('mb_welcome_seen', '1');
+}
+
+if (sessionStorage.getItem('mb_welcome_seen') === '1') {
+  document.getElementById('welcome-banner').classList.add('hidden');
+}
+
 /* ── MODE SWITCH ── */
 function setMode(mode) {
   if (mode === 'full') {
@@ -1096,7 +1251,7 @@ function renderOutput(data, hypnotic) {
 
   if (data.therapist_note) {
     html += `<div class="therapist-note">
-      <p class="sub-label">🗒 Therapist note</p>
+      <p class="sub-label">Therapist note</p>
       <p>${escHtml(data.therapist_note)}</p>
     </div>`;
   }
@@ -1110,24 +1265,25 @@ function renderOutput(data, hypnotic) {
         <span class="distinction-badge">${escHtml(m.distinction)}</span>
       </div>
       <div class="metaphor-body">
+        <p class="sub-label" style="margin-bottom:0.6rem;">Conversational — use in session before hypnosis</p>
         <div class="metaphor-text">${escHtml(m.metaphor)}</div>`;
 
     if (hypnotic === 'yes' && m.hypnotic_version) {
       html += `<div class="sub-section">
-        <p class="sub-label">🎙 Hypnotic version — ready for session</p>
+        <p class="sub-label">Hypnotic version — for use during trance</p>
         <div class="hypnotic-text">${escHtml(m.hypnotic_version)}</div>
       </div>`;
     }
 
     if (gordianActive && m.gordian_note) {
       html += `<div class="sub-section">
-        <p class="sub-label">📐 Gordian model note</p>
+        <p class="sub-label">Gordian model note</p>
         <div class="gordian-text">${escHtml(m.gordian_note)}</div>
       </div>`;
     }
 
     html += `<button class="copy-btn" data-text="${escAttr(fullText)}" onclick="copyText(this)">
-        📋 Copy to clipboard
+        Copy to clipboard
       </button>
     </div></div>`;
   });
@@ -1162,4 +1318,5 @@ function resetOutput() {
 </script>
 </body>
 </html>
+
 
