@@ -872,7 +872,7 @@ async function confirmSave() {
   try {
     const res = await fetch('/api/library', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.access_token}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.access_token}`, 'x-user-id': currentSession.user?.id || '' },
       body: JSON.stringify({ title, distinction: pendingSave.distinction, theme, metaphor_text: pendingSave.metaphor, hypnotic_text: pendingSave.hypnotic_version || '', therapist_note: document.getElementById('output-content')._data?.therapist_note || '', mode: document.body.classList.contains('full-mode') ? 'full' : 'quick' })
     });
     if (!res.ok) throw new Error('Save failed');
