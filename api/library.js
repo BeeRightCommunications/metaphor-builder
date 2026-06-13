@@ -1,19 +1,22 @@
 export default async function handler(req, res) {
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'Not authenticated' });
 
-  // Use anon key with user JWT for reads (respects RLS)
-  const userHeaders = {
-    'Content-Type': 'application/json',
-    'apikey': SUPABASE_ANON_KEY,
-    'Authorization': authHeader
-  };
+  // Decode user ID directly from the JWT token
+  let userId;
+  try {
+    const token = authHeader.replace('Bearer ', '');
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    userId = payload.sub;
+  } catch {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
 
-  // Use service key for writes (bypasses RLS safely server-side)
+  if (!userId) return res.status(401).json({ error: 'Could not identify user' });
+
   const serviceHeaders = {
     'Content-Type': 'application/json',
     'apikey': SUPABASE_SERVICE_KEY,
@@ -23,8 +26,8 @@ export default async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/saved_metaphors?select=*&order=created_at.desc`,
-        { headers: userHeaders }
+        `${SUPABASE_URL}/rest/v1/saved_metaphors?select=*&user_id=eq.${userId}&order=created_at.desc`,
+        { headers: serviceHeaders }
       );
       const data = await response.json();
       if (!response.ok) return res.status(400).json({ error: 'Failed to fetch', detail: data });
@@ -36,12 +39,7 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     const { title, distinction, theme, metaphor_text, hypnotic_text, therapist_note, mode } = req.body;
-    const userId = req.headers['x-user-id'];
-    console.log('POST library - userId:', userId);
-    console.log('POST library - title:', title);
-    console.log('POST library - auth header present:', !!req.headers.authorization);
     if (!title || !metaphor_text) return res.status(400).json({ error: 'Missing required fields' });
-    if (!userId) return res.status(400).json({ error: 'Missing user id' });
     try {
       const response = await fetch(
         `${SUPABASE_URL}/rest/v1/saved_metaphors`,
@@ -61,10 +59,10 @@ export default async function handler(req, res) {
 
   if (req.method === 'DELETE') {
     const { id } = req.body;
-    if (!id) return res.status(400).json({ error: 'Missing metaphor id' });
+    if (!id) return res.status(400).json({ error: 'Missing id' });
     try {
       const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/saved_metaphors?id=eq.${id}`,
+        `${SUPABASE_URL}/rest/v1/saved_metaphors?id=eq.${id}&user_id=eq.${userId}`,
         { method: 'DELETE', headers: serviceHeaders }
       );
       if (!response.ok) return res.status(400).json({ error: 'Failed to delete' });
@@ -74,5 +72,7 @@ export default async function handler(req, res) {
     }
   }
 
+  return res.status(405).json({ error: 'Method not allowed' });
+}
   return res.status(405).json({ error: 'Method not allowed' });
 }
