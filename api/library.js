@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   let userId;
   try {
     const token = authHeader.replace('Bearer ', '');
-    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    const payload = JSON.parse(atob(token.split('.')[1]));
     userId = payload.sub;
   } catch {
     return res.status(401).json({ error: 'Invalid token' });
