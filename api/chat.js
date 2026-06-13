@@ -62,6 +62,7 @@ OUTPUT FORMAT — respond in valid JSON only. No markdown. No preamble. No expla
     {
       "title": "Short evocative name for the metaphor",
       "distinction": "The key distinction or theme this targets",
+      "theme": "One of the transformational themes this maps to",
       "metaphor": "The full conversational metaphor — warm, vivid, written as if speaking directly to the client. Use their world. Make it feel like it was written only for them.",
       "hypnotic_version": "A hypnotic version using Ericksonian language — curiosity frames, present tense, sensory-rich, slow pacing, embedded suggestions, displacement framing where natural. Or null if not requested.",
       "gordian_note": "Brief note on how this maps to Gordian model concepts. Or null if not requested."
