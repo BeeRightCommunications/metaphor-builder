@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       });
       const data = await response.json();
       if (!response.ok) return res.status(400).json({ error: data.error_description || data.msg || 'Signup failed' });
-      return res.status(200).json({ user: data.user, session: data.session });
+      return res.status(200).json({ user: data.user, session: data.session || data });
     }
 
     if (action === 'login') {
