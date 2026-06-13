@@ -34,7 +34,7 @@ export default async function handler(req, res) {
         {
           method: 'POST',
           headers: { ...headers, 'Prefer': 'return=representation' },
-          body: JSON.stringify({ title, distinction, theme, metaphor_text, hypnotic_text, therapist_note, mode })
+          body: JSON.stringify({ title, distinction, theme, metaphor_text, hypnotic_text, therapist_note, mode, user_id: req.headers['x-user-id'] })
         }
       );
       const data = await response.json();
