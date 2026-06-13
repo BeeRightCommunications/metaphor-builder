@@ -37,6 +37,9 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { title, distinction, theme, metaphor_text, hypnotic_text, therapist_note, mode } = req.body;
     const userId = req.headers['x-user-id'];
+    console.log('POST library - userId:', userId);
+    console.log('POST library - title:', title);
+    console.log('POST library - auth header present:', !!req.headers.authorization);
     if (!title || !metaphor_text) return res.status(400).json({ error: 'Missing required fields' });
     if (!userId) return res.status(400).json({ error: 'Missing user id' });
     try {
