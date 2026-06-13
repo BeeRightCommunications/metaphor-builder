@@ -651,6 +651,7 @@ async function handleLogin() {
     const data = await res.json();
     if (!res.ok) { errEl.textContent = data.error || 'Login failed.'; btn.disabled = false; btn.textContent = 'Log in'; return; }
     currentSession = data.session;
+currentSession.user = data.user || data.session?.user;
     sessionStorage.setItem('mb_session', JSON.stringify(data.session));
     showApp(email);
   } catch { errEl.textContent = 'Connection error. Please try again.'; }
@@ -671,6 +672,7 @@ async function handleSignup() {
     const data = await res.json();
     if (!res.ok) { errEl.textContent = data.error || 'Signup failed.'; btn.disabled = false; btn.textContent = 'Create account'; return; }
     currentSession = data.session;
+currentSession.user = data.user || data.session?.user;
     sessionStorage.setItem('mb_session', JSON.stringify(data.session));
     showApp(email);
   } catch { errEl.textContent = 'Connection error. Please try again.'; }
@@ -872,7 +874,11 @@ async function confirmSave() {
   try {
     const res = await fetch('/api/library', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.access_token}`, 'x-user-id': currentSession.user?.id || '' },
+      headers: { 
+  'Content-Type': 'application/json', 
+  'Authorization': `Bearer ${currentSession.access_token}`, 
+  'x-user-id': currentSession.user?.id || currentSession.user?.sub || '' 
+},
       body: JSON.stringify({ title, distinction: pendingSave.distinction, theme, metaphor_text: pendingSave.metaphor, hypnotic_text: pendingSave.hypnotic_version || '', therapist_note: document.getElementById('output-content')._data?.therapist_note || '', mode: document.body.classList.contains('full-mode') ? 'full' : 'quick' })
     });
     if (!res.ok) throw new Error('Save failed');
