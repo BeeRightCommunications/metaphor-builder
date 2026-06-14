@@ -956,6 +956,7 @@ function renderLibrary() {
           ${m.distinction ? `<span class="lib-tag">${escHtml(m.distinction)}</span>` : ''}
           ${m.theme ? `<span class="lib-tag theme">${escHtml(m.theme)}</span>` : ''}
         </div>
+        ${m.hypnotic_text ? `<div class="sub-section"><p class="sub-label">Hypnotic version</p><div class="hypnotic-text">${escHtml(m.hypnotic_text)}</div></div>` : ''}
         <div class="lib-card-actions">
           <button class="lib-expand-btn" onclick="toggleExpand('${m.id}', this)">Read more</button>
           <button class="lib-copy-btn" data-text="${escAttr(fullText)}" onclick="copyText(this)">Copy</button>
