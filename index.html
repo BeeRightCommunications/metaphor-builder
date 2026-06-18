@@ -959,7 +959,7 @@ async function confirmSave() {
     });
     alert('Metaphor saved to your library.');
   } catch (err) {
-    alert('Could not save. Please try again.');
+              if (err.message === 'Save failed') { alert('Could not save. Please try again.'); }
   }
 }
 
@@ -1005,7 +1005,7 @@ function renderLibrary() {
         <span class="distinction-badge">${escHtml(m.distinction || '')}</span>
       </div>
       <div class="lib-card-body">
-        <div class="lib-card-text" id="lib-text-${m.id}">${escHtml(m.metaphor_text)}</div>
+        <div class="lib-card-text" id="lib-text-${m.id}">${escHtml(m.metaphor_text)}</div>${m.hypnotic_text ? `<div class="lib-card-hypnotic" id="lib-hypnotic-${m.id}" style="display:none"><p class="sub-label">Hypnotic version</p>${escHtml(m.hypnotic_text)}</div>` : ''}
         <div class="lib-card-meta">
           ${m.distinction ? `<span class="lib-tag">${escHtml(m.distinction)}</span>` : ''}
           ${m.theme ? `<span class="lib-tag theme">${escHtml(m.theme)}</span>` : ''}
@@ -1024,6 +1024,8 @@ function renderLibrary() {
 function toggleExpand(id, btn) {
   const el = document.getElementById('lib-text-' + id);
   const expanded = el.classList.toggle('expanded');
+        const hypnotic = document.getElementById('lib-hypnotic-' + id);
+        if (hypnotic) hypnotic.style.display = expanded ? 'block' : 'none';
   btn.textContent = expanded ? 'Show less' : 'Read more';
 }
 
