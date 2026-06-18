@@ -435,6 +435,15 @@ body.full-mode .quick-only { display: none; }
             <label for="q-vak-k">Feeling<span>"Can't grasp"</span></label>
           </div>
         </div>
+        <div class="section-label">Output</div>
+        <div class="card">
+          <label>Number of metaphors</label>
+          <div class="seg-control">
+            <input type="radio" name="q-count" id="qc1" value="1" checked><label for="qc1">1</label>
+            <input type="radio" name="q-count" id="qc2" value="2"><label for="qc2">2</label>
+            <input type="radio" name="q-count" id="qc3" value="3"><label for="qc3">3</label>
+          </div>
+        </div>
       </div>
 
       <!-- FULL MODE -->
@@ -813,8 +822,9 @@ function buildMessage() {
     const issue = document.getElementById('q-issue').value.trim();
     const goal = document.getElementById('q-goal').value.trim();
     const vak = document.querySelector('input[name="q-vak"]:checked').value;
+    const qcount = document.querySelector('input[name="q-count"]:checked').value;
     if (!issue) { alert('Please describe what the client is struggling with.'); return null; }
-    return `MODE: Quick (in-session)\nCLIENT SNAPSHOT:\n- Interests: ${interests || 'Not provided'}\n- Issue: ${issue}\n- Goal: ${goal || 'Not specified'}\nREP SYSTEM: ${vak === 'auto' ? 'Auto-detect' : vak}\nHYPNOTIC VERSION: Yes\nDISPLACEMENT: "I once worked with someone who…"\nCOMPLEXITY: accessible to moderate\nCOUNT: 1\nGORDIAN: ${gordianActive ? 'Yes' : 'No'}\nGenerate 1 concise metaphor speakable within 90 seconds. JSON only.`;
+    return `MODE: Quick (in-session)\nCLIENT SNAPSHOT:\n- Interests: ${interests || 'Not provided'}\n- Issue: ${issue}\n- Goal: ${goal || 'Not specified'}\nREP SYSTEM: ${vak === 'auto' ? 'Auto-detect' : vak}\nHYPNOTIC VERSION: Yes\nDISPLACEMENT: "I once worked with someone who…"\nCOMPLEXITY: accessible to moderate\nCOUNT: ${qcount}\nGORDIAN: ${gordianActive ? 'Yes' : 'No'}\nGenerate ${qcount} concise metaphor${qcount > 1 ? 's' : ''}, each speakable within 90 seconds. JSON only.`;
   } else {
     const interests = document.getElementById('f-interests').value.trim();
     const occupation = document.getElementById('f-occupation').value.trim();
@@ -1043,6 +1053,3 @@ function resetOutput() { document.getElementById('output-section').classList.rem
 </script>
 </body>
 </html>
-
-
-
