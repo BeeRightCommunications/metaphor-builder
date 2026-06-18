@@ -211,6 +211,33 @@ body.full-mode .quick-only { display: none; }
 .reset-link { text-align: center; margin-top: 1.1rem; }
 .reset-link button { background: none; border: none; color: var(--orange-dark); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
+/* ── TRIAL INDICATOR ── */
+.trial-indicator { background: var(--honey-light); border: 1px solid rgba(240,165,0,0.3); border-radius: 11px; padding: 0.7rem 1rem; margin-top: 0.85rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.trial-indicator.hidden { display: none; }
+.trial-indicator-text { font-size: 0.78rem; color: var(--ink-mid); line-height: 1.4; }
+.trial-indicator-text strong { color: var(--ink); }
+.trial-upgrade-btn { background: var(--orange); border: none; border-radius: 8px; color: white; font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 500; padding: 0.35rem 0.8rem; cursor: pointer; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
+.trial-upgrade-btn:hover { background: var(--orange-dark); }
+
+/* ── PAYWALL MODAL ── */
+#paywall-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; align-items: center; justify-content: center; padding: 1.5rem; }
+#paywall-modal.visible { display: flex; }
+.paywall-box { background: white; border-radius: 22px; padding: 2rem 1.75rem; width: 100%; max-width: 420px; text-align: center; }
+.paywall-icon { font-size: 2.2rem; margin-bottom: 0.75rem; }
+.paywall-box h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--purple-dark); margin-bottom: 0.5rem; }
+.paywall-box p { font-size: 0.83rem; color: var(--ink-mid); line-height: 1.65; margin-bottom: 1.5rem; }
+.paywall-plans { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+.paywall-plan { border: 1.5px solid var(--border); border-radius: 13px; padding: 0.9rem 1.1rem; text-align: left; cursor: pointer; transition: all 0.15s; background: var(--cream); }
+.paywall-plan:hover { border-color: var(--purple); background: var(--purple-light); }
+.paywall-plan.featured { border-color: var(--orange); background: var(--orange-light); }
+.paywall-plan-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2rem; }
+.paywall-plan-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+.paywall-plan-price { font-size: 0.88rem; font-weight: 600; color: var(--purple-dark); }
+.paywall-plan-desc { font-size: 0.72rem; color: var(--ink-light); }
+.paywall-plan-badge { font-size: 0.62rem; background: var(--orange); color: white; padding: 0.15rem 0.5rem; border-radius: 100px; font-weight: 500; }
+.paywall-dismiss { background: none; border: none; color: var(--ink-light); font-family: 'DM Sans', sans-serif; font-size: 0.78rem; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; margin-top: 0.25rem; }
+.paywall-dismiss:hover { color: var(--ink-mid); }
+
 /* ── LIBRARY PAGE ── */
 .library-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
 .library-header h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
@@ -592,7 +619,11 @@ body.full-mode .quick-only { display: none; }
         </div>
       </div>
 
-      <button class="generate-btn" id="generateBtn" onclick="generateMetaphors()">✦ Generate metaphors</button>
+      <div class="trial-indicator hidden" id="trial-indicator">
+  <div class="trial-indicator-text"><strong>Free trial</strong> — <span id="trial-remaining-text"></span></div>
+  <button class="trial-upgrade-btn" onclick="showPaywall()">Upgrade</button>
+</div>
+<button class="generate-btn" id="generateBtn" onclick="generateMetaphors()">✦ Generate metaphors</button>
 
       <div id="output-section">
         <div class="section-label" style="margin-top:0.25rem;">Your metaphors</div>
@@ -624,7 +655,41 @@ body.full-mode .quick-only { display: none; }
   </div>
 </div>
 
-<!-- ── SAVE MODAL ── -->
+<!-- ── PAYWALL MODAL ── -->
+<div id="paywall-modal">
+  <div class="paywall-box">
+    <div class="paywall-icon">🐝</div>
+    <h2>Your free trial has ended</h2>
+    <p>You've used your 2 Quick Mode and 1 Full Mode trial generations. Subscribe to keep building metaphors for your clients.</p>
+    <div class="paywall-plans">
+      <div class="paywall-plan" onclick="handleSubscribe('monthly')">
+        <div class="paywall-plan-header">
+          <span class="paywall-plan-name">Monthly</span>
+          <span class="paywall-plan-price">A$8.99/mo</span>
+        </div>
+        <div class="paywall-plan-desc">Unlimited generations · cancel anytime</div>
+      </div>
+      <div class="paywall-plan featured" onclick="handleSubscribe('annual')">
+        <div class="paywall-plan-header">
+          <span class="paywall-plan-name">Annual</span>
+          <span class="paywall-plan-price">A$69/yr</span>
+          <span class="paywall-plan-badge">Best value</span>
+        </div>
+        <div class="paywall-plan-desc">Save 36% · unlimited generations</div>
+      </div>
+      <div class="paywall-plan" onclick="handleSubscribe('lifetime')">
+        <div class="paywall-plan-header">
+          <span class="paywall-plan-name">Lifetime</span>
+          <span class="paywall-plan-price">A$197 once</span>
+        </div>
+        <div class="paywall-plan-desc">Pay once · unlimited forever</div>
+      </div>
+    </div>
+    <button class="paywall-dismiss" onclick="closePaywall()">Maybe later</button>
+  </div>
+</div>
+  
+  <!-- ── SAVE MODAL ── -->
 <div id="save-modal">
   <div class="modal-box">
     <h3>Save to My Library</h3>
@@ -863,6 +928,7 @@ async function generateMetaphors() {
   if (!userMessage) return;
   const isFullMode = document.body.classList.contains('full-mode');
   const hypnotic = isFullMode ? document.querySelector('input[name="f-hypnotic"]:checked').value : 'yes';
+  const mode = isFullMode ? 'full' : 'quick';
   const btn = document.getElementById('generateBtn');
   btn.disabled = true; btn.textContent = 'Building metaphors…';
   const outputSection = document.getElementById('output-section');
@@ -871,10 +937,24 @@ async function generateMetaphors() {
   outputContent.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Weaving metaphors from the client's world…</p></div>`;
   outputSection.classList.add('visible');
   outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const session = JSON.parse(sessionStorage.getItem('mb_session') || 'null');
+  const token = currentSession?.access_token || session?.access_token;
   try {
-    const response = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userMessage }) });
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ userMessage, mode })
+    });
+    if (response.status === 403) {
+      const err = await response.json().catch(() => ({}));
+      outputSection.classList.remove('visible');
+      btn.disabled = false; btn.textContent = '✦ Generate metaphors';
+      showPaywall();
+      return;
+    }
     if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err.error || `Server error ${response.status}`); }
     const data = await response.json();
+    if (data.trialRemaining) updateTrialIndicator(data.trialRemaining);
     const raw = data.content.map(b => b.text || '').join('');
     const clean = raw.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
@@ -883,6 +963,58 @@ async function generateMetaphors() {
     outputContent.innerHTML = `<div class="error-box"><strong>Something went wrong:</strong> ${err.message}<br><br>Please try again.</div>`;
   }
   btn.disabled = false; btn.textContent = '✦ Generate metaphors';
+}
+
+function showPaywall() {
+  document.getElementById('paywall-modal').classList.add('visible');
+}
+
+function closePaywall() {
+  document.getElementById('paywall-modal').classList.remove('visible');
+}
+
+async function handleSubscribe(plan) {
+  const session = JSON.parse(sessionStorage.getItem('mb_session') || 'null');
+  const token = currentSession?.access_token || session?.access_token;
+  if (!token) { showLogin(); return; }
+  try {
+    const res = await fetch('/api/stripe-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ plan })
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else alert('Could not start checkout. Please try again.');
+  } catch { alert('Connection error. Please try again.'); }
+}
+
+function updateTrialIndicator(trialRemaining) {
+  const indicator = document.getElementById('trial-indicator');
+  const text = document.getElementById('trial-remaining-text');
+  if (!indicator || !text) return;
+  const quickLeft = trialRemaining.quick ?? 0;
+  const fullLeft = trialRemaining.full ?? 0;
+  if (quickLeft <= 0 && fullLeft <= 0) {
+    indicator.classList.remove('hidden');
+    text.textContent = 'Trial complete — subscribe to continue';
+    return;
+  }
+  indicator.classList.remove('hidden');
+  const parts = [];
+  if (quickLeft > 0) parts.push(`${quickLeft} quick generation${quickLeft !== 1 ? 's' : ''} left`);
+  if (fullLeft > 0) parts.push(`${fullLeft} full generation left`);
+  text.textContent = parts.join(' · ');
+}
+
+// Handle payment success/cancel redirect
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('payment') === 'success') {
+  const plan = urlParams.get('plan') || 'subscription';
+  setTimeout(() => alert(`Welcome! Your ${plan} plan is now active. Happy metaphor building!`), 500);
+  window.history.replaceState({}, '', '/');
+} else if (urlParams.get('payment') === 'cancelled') {
+  window.history.replaceState({}, '', '/');
 }
 
 /* ══════════════════════════════════
