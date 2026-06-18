@@ -290,6 +290,7 @@ body.full-mode .quick-only { display: none; }
     <label for="login-password">Password</label>
     <input type="password" id="login-password" placeholder="Your password">
     <button class="auth-btn" id="login-btn" onclick="handleLogin()">Log in</button>
+    <p class="auth-switch" style="margin-top:0.6rem;"><button onclick="showForgot()">Forgot your password?</button></p>
     <p class="auth-switch">Don't have an account? <button onclick="showSignup()">Create one</button></p>
   </div>
 </div>
@@ -312,6 +313,24 @@ body.full-mode .quick-only { display: none; }
     <input type="password" id="signup-password" placeholder="At least 8 characters">
     <button class="auth-btn" id="signup-btn" onclick="handleSignup()">Create account</button>
     <p class="auth-switch">Already have an account? <button onclick="showLogin()">Log in</button></p>
+  </div>
+</div>
+
+<!-- ── FORGOT PASSWORD SCREEN ── -->
+<div id="forgot-screen" class="auth-screen hidden">
+  <div class="auth-box">
+    <img src="https://raw.githubusercontent.com/BeeRightCommunications/metaphor-builder/main/BEERIGHTCOMMUNICATIONS_LOGO_PROFILEPIC_FA.jpg"
+         alt="Bee Right Communications" class="auth-logo" onerror="this.style.display='none'">
+    <h1>Reset your password</h1>
+    <p class="tagline">Bee Right Communications</p>
+    <div class="auth-divider"></div>
+    <p style="font-size:0.8rem;color:var(--ink-mid);text-align:center;margin-bottom:1rem;">Enter your email and we'll send you a reset link.</p>
+    <p class="auth-error" id="forgot-error"></p>
+    <p style="font-size:0.78rem;color:#2D7A4A;text-align:center;margin-bottom:0.75rem;min-height:1.1em;" id="forgot-success"></p>
+    <label for="forgot-email">Email address</label>
+    <input type="email" id="forgot-email" placeholder="you@example.com">
+    <button class="auth-btn" id="forgot-btn" onclick="handleForgot()">Send reset link</button>
+    <p class="auth-switch"><button onclick="showLogin()">← Back to login</button></p>
   </div>
 </div>
 
@@ -500,6 +519,14 @@ body.full-mode .quick-only { display: none; }
               <input type="checkbox" class="toggle-pill" id="fd6" name="f-distinctions" value="Specific is not universal"><label for="fd6">Specific ≠ universal</label>
             </div>
           </div>
+          <div class="field-group">
+            <label>How should distinctions be used?</label>
+            <p class="hint">If multiple distinctions are selected above</p>
+            <div class="seg-control">
+              <input type="radio" name="f-distinction-mode" id="fdm-weave" value="weave" checked><label for="fdm-weave">Weave all into one</label>
+              <input type="radio" name="f-distinction-mode" id="fdm-separate" value="separate"><label for="fdm-separate">One metaphor per distinction</label>
+            </div>
+          </div>
         </div>
 
         <div class="section-label">Representational system</div>
@@ -628,12 +655,43 @@ let currentFilter = 'all';
 ══════════════════════════════════ */
 function showLogin() {
   document.getElementById('signup-screen').classList.add('hidden');
+  document.getElementById('forgot-screen').classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
 }
 
 function showSignup() {
   document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('forgot-screen').classList.add('hidden');
   document.getElementById('signup-screen').classList.remove('hidden');
+}
+
+function showForgot() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('signup-screen').classList.add('hidden');
+  document.getElementById('forgot-screen').classList.remove('hidden');
+}
+
+async function handleForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  const errEl = document.getElementById('forgot-error');
+  const successEl = document.getElementById('forgot-success');
+  const btn = document.getElementById('forgot-btn');
+  if (!email) { errEl.textContent = 'Please enter your email address.'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…'; errEl.textContent = ''; successEl.textContent = '';
+  try {
+    const res = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'forgot', email }) });
+    if (res.ok) {
+      successEl.textContent = 'Reset link sent — check your email.';
+      btn.textContent = 'Sent!';
+    } else {
+      const data = await res.json();
+      errEl.textContent = data.error || 'Could not send reset email.';
+      btn.disabled = false; btn.textContent = 'Send reset link';
+    }
+  } catch {
+    errEl.textContent = 'Connection error. Please try again.';
+    btn.disabled = false; btn.textContent = 'Send reset link';
+  }
 }
 
 document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
@@ -651,7 +709,6 @@ async function handleLogin() {
     const data = await res.json();
     if (!res.ok) { errEl.textContent = data.error || 'Login failed.'; btn.disabled = false; btn.textContent = 'Log in'; return; }
     currentSession = data.session;
-currentSession.user = data.user || data.session?.user;
     sessionStorage.setItem('mb_session', JSON.stringify(data.session));
     showApp(email);
   } catch { errEl.textContent = 'Connection error. Please try again.'; }
@@ -672,7 +729,6 @@ async function handleSignup() {
     const data = await res.json();
     if (!res.ok) { errEl.textContent = data.error || 'Signup failed.'; btn.disabled = false; btn.textContent = 'Create account'; return; }
     currentSession = data.session;
-currentSession.user = data.user || data.session?.user;
     sessionStorage.setItem('mb_session', JSON.stringify(data.session));
     showApp(email);
   } catch { errEl.textContent = 'Connection error. Please try again.'; }
@@ -778,10 +834,14 @@ function buildMessage() {
     const hypnotic = document.querySelector('input[name="f-hypnotic"]:checked').value;
     const count = document.querySelector('input[name="f-count"]:checked').value;
     const distinctions = Array.from(document.querySelectorAll('input[name="f-distinctions"]:checked')).map(e => e.value);
+    const distinctionMode = document.querySelector('input[name="f-distinction-mode"]:checked')?.value || 'weave';
+    const separateMode = distinctionMode === 'separate' && distinctions.length > 1;
+    const effectiveCount = separateMode ? distinctions.length : count;
+    const distinctionInstruction = separateMode ? 'ONE PER DISTINCTION — generate one separate focused metaphor for each listed distinction' : 'weave all selected distinctions into each metaphor';
     if (!issue) { alert('Please describe what the client is struggling with.'); return null; }
     const structural = (obstacle || resource || turning || resolution) ? `\nSTRUCTURAL MAP:\n- Obstacle: ${obstacle || 'not specified'}\n- Resource: ${resource || 'not specified'}\n- Turning point: ${turning || 'not specified'}\n- Resolution: ${resolution || 'not specified'}` : '';
     const notesSection = notes ? `\nSESSION NOTES (de-identified):\n${notes}` : '';
-    return `MODE: Full (pre/post-session)\nCLIENT:\n- Interests: ${interests || 'Not provided'}\n- Occupation: ${occupation || 'Not provided'}\n- Media: ${media || 'Not provided'}\n- Family: ${family || 'Not provided'}\nISSUE: ${issue}\nGOAL: ${goal || 'Not specified'}${structural}${notesSection}\nPATTERN: ${pattern || 'Identify from issue'}\nDISTINCTIONS: ${distinctions.length > 0 ? distinctions.join(', ') : 'Identify most relevant'}\nREP SYSTEM: ${vak === 'auto' ? 'Auto-detect' : vak}\nDISPLACEMENT: ${displacement}\nCOMPLEXITY: ${complexity}\nHYPNOTIC: ${hypnotic === 'yes' ? 'Yes' : 'No'}\nCOUNT: ${count}\nGORDIAN: ${gordianActive ? 'Yes' : 'No'}\nJSON only.`;
+    return `MODE: Full (pre/post-session)\nCLIENT:\n- Interests: ${interests || 'Not provided'}\n- Occupation: ${occupation || 'Not provided'}\n- Media: ${media || 'Not provided'}\n- Family: ${family || 'Not provided'}\nISSUE: ${issue}\nGOAL: ${goal || 'Not specified'}${structural}${notesSection}\nPATTERN: ${pattern || 'Identify from issue'}\nDISTINCTIONS: ${distinctions.length > 0 ? distinctions.join(', ') : 'Identify most relevant'}\nDISTINCTION MODE: ${distinctionInstruction}\nREP SYSTEM: ${vak === 'auto' ? 'Auto-detect' : vak}\nDISPLACEMENT: ${displacement}\nCOMPLEXITY: ${complexity}\nHYPNOTIC: ${hypnotic === 'yes' ? 'Yes' : 'No'}\nCOUNT: ${effectiveCount}\nGORDIAN: ${gordianActive ? 'Yes' : 'No'}\nJSON only.`;
   }
 }
 
@@ -869,40 +929,22 @@ function closeModal() {
 async function confirmSave() {
   if (!pendingSave) return;
   if (!currentSession?.access_token) { alert('Please log in to save metaphors.'); return; }
-  
   const title = document.getElementById('modal-title').value.trim() || pendingSave.title;
   const theme = document.getElementById('modal-theme').value;
-  
-  // Extract user ID from all possible locations in the session object
-  const userId = currentSession?.user?.id 
-    || currentSession?.user?.sub
-    || currentSession?.id
-    || currentSession?.sub
-    || '';
-  
-  console.log('Saving - userId:', userId);
-  console.log('Saving - session keys:', Object.keys(currentSession || {}));
-  
   try {
     const res = await fetch('/api/library', {
       method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${currentSession.access_token}`,
-        'x-user-id': userId
-      },
-      body: JSON.stringify({ 
-        title, 
-        distinction: pendingSave.distinction, 
-        theme, 
-        metaphor_text: pendingSave.metaphor, 
-        hypnotic_text: pendingSave.hypnotic_version || '', 
-        therapist_note: document.getElementById('output-content')._data?.therapist_note || '', 
-        mode: document.body.classList.contains('full-mode') ? 'full' : 'quick' 
-      })
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.access_token}` },
+      body: JSON.stringify({ title, distinction: pendingSave.distinction, theme, metaphor_text: pendingSave.metaphor, hypnotic_text: pendingSave.hypnotic_version || '', therapist_note: document.getElementById('output-content')._data?.therapist_note || '', mode: document.body.classList.contains('full-mode') ? 'full' : 'quick' })
     });
     if (!res.ok) throw new Error('Save failed');
     closeModal();
+    // Mark save button as saved
+    document.querySelectorAll('.save-btn').forEach(btn => {
+      if (btn.getAttribute('data-index') === String(pendingSave._index)) {
+        btn.textContent = 'Saved'; btn.classList.add('saved'); btn.disabled = true;
+      }
+    });
     alert('Metaphor saved to your library.');
   } catch (err) {
     alert('Could not save. Please try again.');
@@ -956,7 +998,6 @@ function renderLibrary() {
           ${m.distinction ? `<span class="lib-tag">${escHtml(m.distinction)}</span>` : ''}
           ${m.theme ? `<span class="lib-tag theme">${escHtml(m.theme)}</span>` : ''}
         </div>
-        ${m.hypnotic_text ? `<div class="sub-section"><p class="sub-label">Hypnotic version</p><div class="hypnotic-text">${escHtml(m.hypnotic_text)}</div></div>` : ''}
         <div class="lib-card-actions">
           <button class="lib-expand-btn" onclick="toggleExpand('${m.id}', this)">Read more</button>
           <button class="lib-copy-btn" data-text="${escAttr(fullText)}" onclick="copyText(this)">Copy</button>
