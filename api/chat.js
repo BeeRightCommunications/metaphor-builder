@@ -1,8 +1,35 @@
+import { checkAccess } from './access.js';
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { userMessage, mode } = req.body;
   if (!userMessage) return res.status(400).json({ error: 'Missing userMessage' });
+
+  // --- ACCESS GATING ---
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ error: 'Unauthorised' });
+
+  const token = authHeader.replace('Bearer ', '');
+  let userId;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    userId = payload.sub;
+  } catch {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+
+  const generationMode = mode === 'full' ? 'full' : 'quick';
+  const access = await checkAccess(userId, generationMode);
+
+  if (!access.allowed) {
+    return res.status(403).json({
+      error: 'access_denied',
+      reason: access.reason,
+      trialQuickUsed: access.trialQuickUsed,
+      trialFullUsed: access.trialFullUsed,
+    });
+  }
 
   const SYSTEM_PROMPT = `You are the Metaphor Builder — an expert clinical metaphor generator for hypnotherapists and strategic psychotherapists, built on the principles of Milton Erickson and modern Ericksonian hypnotherapy.
 
@@ -97,6 +124,15 @@ OUTPUT FORMAT — respond in valid JSON only. No markdown. No preamble. No expla
     }
 
     const data = await response.json();
+
+    // Pass trial remaining info back to frontend if applicable
+    if (access.trialRemaining) {
+      data.trialRemaining = access.trialRemaining;
+    }
+    if (access.warning) {
+      data.warning = access.warning;
+    }
+
     return res.status(200).json(data);
 
   } catch (err) {
