@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   const token = authHeader.replace('Bearer ', '');
   let userId, userEmail;
   try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); const payload = JSON.parse(Buffer.from(base64, 'base64').toString('utf8'));
     userId = payload.sub;
     userEmail = payload.email;
   } catch {
