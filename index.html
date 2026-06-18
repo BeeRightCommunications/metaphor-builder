@@ -937,17 +937,14 @@ function closeModal() {
 }
 
 async function confirmSave() {
- async function confirmSave() {
   if (!pendingSave) return;
-  const session = JSON.parse(sessionStorage.getItem('mb_session') || 'null');
-  const token = currentSession?.access_token || session?.access_token;
-  if (!token) { alert('Please log in to save metaphors.'); return; }
+  if (!currentSession?.access_token) { alert('Please log in to save metaphors.'); return; }
   const title = document.getElementById('modal-title').value.trim() || pendingSave.title;
   const theme = document.getElementById('modal-theme').value;
   try {
     const res = await fetch('/api/library', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${currentSession.access_token}` },
       body: JSON.stringify({ title, distinction: pendingSave.distinction, theme, metaphor_text: pendingSave.metaphor, hypnotic_text: pendingSave.hypnotic_version || '', therapist_note: document.getElementById('output-content')._data?.therapist_note || '', mode: document.body.classList.contains('full-mode') ? 'full' : 'quick' })
     });
     if (!res.ok) throw new Error('Save failed');
