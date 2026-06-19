@@ -1,4 +1,11 @@
 import { checkAccess } from './access.js';
+import { updateTags } from './mailchimp.js';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -11,10 +18,12 @@ export default async function handler(req, res) {
   if (!authHeader) return res.status(401).json({ error: 'Unauthorised' });
 
   const token = authHeader.replace('Bearer ', '');
-  let userId;
+  let userId, userEmail;
   try {
-    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'); const payload = JSON.parse(Buffer.from(base64, 'base64').toString('utf8'));
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    const payload = JSON.parse(Buffer.from(base64, 'base64').toString('utf8'));
     userId = payload.sub;
+    userEmail = payload.email;
   } catch {
     return res.status(401).json({ error: 'Invalid token' });
   }
@@ -23,6 +32,18 @@ export default async function handler(req, res) {
   const access = await checkAccess(userId, generationMode);
 
   if (!access.allowed) {
+    // Tag trial-exhausted users in Mailchimp when they hit the wall
+    if (
+      userEmail &&
+      (access.reason === 'trial_quick_exhausted' || access.reason === 'trial_full_exhausted')
+    ) {
+      try {
+        await updateTags(userEmail, [{ name: 'trial-exhausted', status: 'active' }]);
+      } catch (mcErr) {
+        console.error('Mailchimp trial-exhausted tag error (non-fatal):', mcErr);
+      }
+    }
+
     return res.status(403).json({
       error: 'access_denied',
       reason: access.reason,
@@ -40,7 +61,6 @@ Your role is to generate deeply personalised therapeutic metaphors that are:
 
 CRITICAL — CLIENT INTERESTS AND RESOURCES:
 When a client has multiple interests, hobbies, strengths, or resources listed, you MUST weave ALL of them meaningfully into the metaphor — not just the first one. Each listed item is therapeutically significant. Draw on the full picture of the client's world, not just the most obvious or first-listed element. If generating multiple metaphors, each can foreground a different interest, but every metaphor should feel like it belongs to THIS specific client's whole world.
-
 
 CORE METAPHOR PRINCIPLES:
 - Metaphors must do structural work — not just create rapport or decoration
@@ -125,13 +145,8 @@ OUTPUT FORMAT — respond in valid JSON only. No markdown. No preamble. No expla
 
     const data = await response.json();
 
-    // Pass trial remaining info back to frontend if applicable
-    if (access.trialRemaining) {
-      data.trialRemaining = access.trialRemaining;
-    }
-    if (access.warning) {
-      data.warning = access.warning;
-    }
+    if (access.trialRemaining) data.trialRemaining = access.trialRemaining;
+    if (access.warning) data.warning = access.warning;
 
     return res.status(200).json(data);
 
