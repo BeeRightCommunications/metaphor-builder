@@ -1,5 +1,6 @@
 import { checkAccess } from './access.js';
 import { updateTags } from './mailchimp.js';
+import { sendTrialExhaustedEmail } from './email.js';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
@@ -41,6 +42,13 @@ export default async function handler(req, res) {
         await updateTags(userEmail, [{ name: 'trial-exhausted', status: 'active' }]);
       } catch (mcErr) {
         console.error('Mailchimp trial-exhausted tag error (non-fatal):', mcErr);
+      }
+
+      // Send trial-exhausted nudge email
+      try {
+        await sendTrialExhaustedEmail({ email: userEmail, name: '' });
+      } catch (emailErr) {
+        console.error('Trial-exhausted email error (non-fatal):', emailErr);
       }
     }
 
