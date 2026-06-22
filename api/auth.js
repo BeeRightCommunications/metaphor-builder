@@ -1,4 +1,5 @@
 import { addOrUpdateContact } from './mailchimp.js';
+import { sendWelcomeEmail } from './email.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -19,7 +20,7 @@ export default async function handler(req, res) {
       const data = await response.json();
       if (!response.ok) return res.status(400).json({ error: data.error_description || data.msg || 'Signup failed' });
 
-      // --- Add to Mailchimp on successful signup ---
+      // Add to Mailchimp
       try {
         await addOrUpdateContact({
           email,
@@ -28,6 +29,13 @@ export default async function handler(req, res) {
         });
       } catch (mcErr) {
         console.error('Mailchimp signup sync error (non-fatal):', mcErr);
+      }
+
+      // Send welcome email
+      try {
+        await sendWelcomeEmail({ email, name: name || '' });
+      } catch (emailErr) {
+        console.error('Welcome email error (non-fatal):', emailErr);
       }
 
       return res.status(200).json({ user: data.user, session: data.session || data });
