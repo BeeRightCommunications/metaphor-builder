@@ -15,7 +15,7 @@ export async function sendWelcomeEmail({ email, name }) {
     to: email,
     subject: 'Welcome to Metaphor Builder 🐝',
     html: `
-      <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #1C1A14;">
+      <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #1C1A14; box-sizing: border-box; width: 100%;">
         <div style="background: #5C2D7A; padding: 2rem; text-align: center; border-radius: 12px 12px 0 0;">
           <h1 style="color: white; font-size: 1.6rem; margin: 0;">Metaphor Builder</h1>
           <p style="color: rgba(255,255,255,0.8); margin: 0.5rem 0 0;">by Bee Right Communications</p>
@@ -31,7 +31,7 @@ export async function sendWelcomeEmail({ email, name }) {
           </ul>
           <p>The more specific you are about your client's world — their hobbies, job, interests, language — the more personalised and powerful the metaphor.</p>
           <div style="text-align: center; margin: 2rem 0;">
-            <a href="https://metaphorbuilder.app" style="background: #F26B1D; color: white; padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1rem;">Start building metaphors →</a>
+            <a href="https://metaphorbuilder.app" style="background: #F26B1D; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.95rem; display: inline-block; mso-padding-alt: 0;">Start building metaphors →</a>
           </div>
           <p>If you have any questions or run into anything, just reply to this email — it comes straight to me.</p>
           <p style="margin-top: 2rem;">Matt<br>
@@ -49,7 +49,7 @@ export async function sendTrialExhaustedEmail({ email, name }) {
     to: email,
     subject: "You've used your free trial — here's what's next",
     html: `
-      <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #1C1A14;">
+      <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #1C1A14; box-sizing: border-box; width: 100%;">
         <div style="background: #5C2D7A; padding: 2rem; text-align: center; border-radius: 12px 12px 0 0;">
           <h1 style="color: white; font-size: 1.6rem; margin: 0;">Metaphor Builder</h1>
           <p style="color: rgba(255,255,255,0.8); margin: 0.5rem 0 0;">by Bee Right Communications</p>
@@ -66,7 +66,7 @@ export async function sendTrialExhaustedEmail({ email, name }) {
             <p style="margin: 0.25rem 0;">♾️ <strong>Lifetime</strong> — A$197 once, unlimited forever</p>
           </div>
           <div style="text-align: center; margin: 2rem 0;">
-            <a href="https://metaphorbuilder.app" style="background: #F26B1D; color: white; padding: 0.85rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1rem;">Subscribe now →</a>
+            <a href="https://metaphorbuilder.app" style="background: #F26B1D; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.95rem; display: inline-block; mso-padding-alt: 0;">Subscribe now →</a>
           </div>
           <p>If you have any questions or want to talk through whether it's right for you, just reply — I'm happy to chat.</p>
           <p style="margin-top: 2rem;">Matt<br>
