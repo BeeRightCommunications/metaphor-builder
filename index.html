@@ -381,6 +381,7 @@ body.full-mode .quick-only { display: none; }
     <div class="nav-inner">
       <button class="nav-tab active" id="tab-build" onclick="showPage('build')">Build</button>
       <button class="nav-tab" id="tab-library" onclick="showPage('library')">My Library</button>
+      <button class="nav-tab" id="tab-help" onclick="showPage('help')">Help</button>
     </div>
   </div>
 
@@ -654,6 +655,41 @@ body.full-mode .quick-only { display: none; }
     </div>
   </div>
 </div>
+
+  <!-- ══════ HELP PAGE ══════ -->
+  <div id="page-help" class="page">
+    <div class="container">
+      <h2 style="margin-bottom:1.5rem;">Help &amp; Support</h2>
+
+      <div style="background:var(--cream);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;">
+        <h3 style="font-size:1rem;margin-bottom:0.5rem;color:var(--purple-dark);">Quick answers</h3>
+        <p style="font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.75rem;"><strong>Quick Mode vs Full Mode?</strong><br>Quick Mode is for in-session use — 3 fields, one metaphor in seconds. Full Mode is for pre or post-session preparation with richer, more targeted output.</p>
+        <p style="font-size:0.9rem;color:var(--ink-mid);margin-bottom:0.75rem;"><strong>How do I get the best results?</strong><br>Be specific about your client's world — their hobbies, job, interests. The more detail you give, the more personalised the metaphor.</p>
+        <p style="font-size:0.9rem;color:var(--ink-mid);margin-bottom:0;"><strong>How do I manage my subscription?</strong><br>Email us and we'll sort it out for you straight away.</p>
+      </div>
+
+      <div style="background:white;border:1px solid var(--purple-light);border-radius:14px;padding:1.5rem;">
+        <h3 style="font-size:1rem;margin-bottom:1rem;color:var(--purple-dark);">Contact support</h3>
+        <div id="support-success" style="display:none;background:#e8f5e9;border-radius:8px;padding:1rem;margin-bottom:1rem;color:#2e7d32;font-size:0.9rem;">
+          &#10003; Message sent — we'll get back to you shortly.
+        </div>
+        <div id="support-error" style="display:none;background:#fdecea;border-radius:8px;padding:1rem;margin-bottom:1rem;color:#c62828;font-size:0.9rem;"></div>
+        <div class="field-group">
+          <label class="field-label">Your name</label>
+          <input type="text" id="support-name" class="field-input" placeholder="Your name">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Your email</label>
+          <input type="email" id="support-email" class="field-input" placeholder="you@example.com">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Message</label>
+          <textarea id="support-message" class="field-input" rows="5" placeholder="Tell us what's going on and we'll help you out…" style="resize:vertical;"></textarea>
+        </div>
+        <button class="generate-btn" id="support-submit-btn" onclick="submitSupportForm()" style="margin-top:0.5rem;">Send message</button>
+      </div>
+    </div>
+  </div>
 
 <!-- ── PAYWALL MODAL ── -->
 <div id="paywall-modal">
@@ -1186,6 +1222,55 @@ function copyText(btn) {
 function escHtml(str) { if (!str) return ''; return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function escAttr(str) { if (!str) return ''; return String(str).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 function resetOutput() { document.getElementById('output-section').classList.remove('visible'); }
+
+/* ══════════════════════════════════
+   SUPPORT FORM
+══════════════════════════════════ */
+async function submitSupportForm() {
+  const name = document.getElementById('support-name').value.trim();
+  const email = document.getElementById('support-email').value.trim();
+  const message = document.getElementById('support-message').value.trim();
+  const btn = document.getElementById('support-submit-btn');
+  const successEl = document.getElementById('support-success');
+  const errorEl = document.getElementById('support-error');
+
+  successEl.style.display = 'none';
+  errorEl.style.display = 'none';
+
+  if (!name || !email || !message) {
+    errorEl.textContent = 'Please fill in all fields.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    const res = await fetch('/api/support', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      successEl.style.display = 'block';
+      document.getElementById('support-name').value = '';
+      document.getElementById('support-email').value = '';
+      document.getElementById('support-message').value = '';
+    } else {
+      errorEl.textContent = data.error || 'Something went wrong. Please try again.';
+      errorEl.style.display = 'block';
+    }
+  } catch (err) {
+    errorEl.textContent = 'Could not send message. Please check your connection.';
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Send message';
+  }
+}
+
 </script>
 </body>
 </html>
