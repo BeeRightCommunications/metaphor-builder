@@ -1,0 +1,31 @@
+{
+  "name": "Metaphor Builder",
+  "short_name": "Metaphor Builder",
+  "description": "Generate personalised therapeutic metaphors from your client's world.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FDFAF4",
+  "theme_color": "#5C2D7A",
+  "icons": [
+    {
+      "src": "/icon-192_1.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
