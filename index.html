@@ -729,30 +729,39 @@ body.full-mode .quick-only { display: none; }
     <div class="paywall-icon"><img src="/BEERIGHTCOMMUNICATIONS_LOGO_FA.jpg" alt="Bee Right Communications" style="width:80px;height:80px;object-fit:contain;border-radius:10px;"></div>
     <h2>Your free trial has ended</h2>
     <p>You've used your 2 Quick Mode and 1 Full Mode trial generations. Subscribe to keep building metaphors for your clients.</p>
-    <div class="paywall-plans">
-      <div class="paywall-plan" onclick="handleSubscribe('monthly')">
-        <div class="paywall-plan-header">
-          <span class="paywall-plan-name">Monthly</span>
-          <span class="paywall-plan-price">A$8.99/mo</span>
+          <div class="paywall-plans">
+        <div class="paywall-plan" onclick="handleSubscribe('monthly')">
+          <div class="paywall-plan-header">
+            <span class="paywall-plan-name">Monthly</span>
+            <span class="paywall-plan-price">A$24.99/mo</span>
+          </div>
+          <div class="paywall-plan-desc">Unlimited generations · cancel anytime</div>
         </div>
-        <div class="paywall-plan-desc">Unlimited generations · cancel anytime</div>
-      </div>
-      <div class="paywall-plan featured" onclick="handleSubscribe('annual')">
-        <div class="paywall-plan-header">
-          <span class="paywall-plan-name">Annual</span>
-          <span class="paywall-plan-price">A$69/yr</span>
-          <span class="paywall-plan-badge">Best value</span>
+        <div class="paywall-plan featured" onclick="handleSubscribe('annual')">
+          <div class="paywall-plan-header">
+            <span class="paywall-plan-name">Annual</span>
+            <span class="paywall-plan-price">A$250/yr</span>
+            <span class="paywall-plan-badge">Best value</span>
+          </div>
+          <div class="paywall-plan-desc">Save 17% · unlimited generations</div>
         </div>
-        <div class="paywall-plan-desc">Save 36% · unlimited generations</div>
-      </div>
-      <div class="paywall-plan" onclick="handleSubscribe('lifetime')">
-        <div class="paywall-plan-header">
-          <span class="paywall-plan-name">Lifetime</span>
-          <span class="paywall-plan-price">A$197 once</span>
+        <div class="paywall-plan" onclick="handleSubscribe('lifetime')">
+          <div class="paywall-plan-header">
+            <span class="paywall-plan-name">Lifetime</span>
+            <span class="paywall-plan-price">A$650 once</span>
+          </div>
+          <div class="paywall-plan-desc">Pay once · up to 1,000 generations/year</div>
         </div>
-        <div class="paywall-plan-desc">Pay once · unlimited forever</div>
       </div>
-    </div>
+      <div style="text-align:center; margin-top:16px; font-size:14px;">
+        <a href="#" onclick="confirmStudentPlan(); return false;" style="color:#5C2D7A;">Student or recent grad? A$10/mo for 10 metaphors a month →</a>
+      </div>
+      <script>
+      function confirmStudentPlan() {
+        const ok = confirm("Student plan: A$10/month, up to 10 metaphors a month.\n\nAfter 12 months this automatically continues at the standard rate (A$24.99/month) — this switch happens automatically, no action needed from you, and we'll bill the new rate at that point.\n\nContinue to checkout?");
+        if (ok) handleSubscribe('student');
+      }
+      </script>
     <button class="paywall-dismiss" onclick="closePaywall()">Maybe later</button>
   </div>
 </div>
@@ -1013,11 +1022,17 @@ async function generateMetaphors() {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ userMessage, mode })
     });
-    if (response.status === 403) {
+        if (response.status === 403) {
       const err = await response.json().catch(() => ({}));
       outputSection.classList.remove('visible');
       btn.disabled = false; btn.textContent = '✦ Generate metaphors';
-      showPaywall();
+      if (err.reason === 'lifetime_cap_reached') {
+        alert('You\'ve reached your 1,000 generations for this year on the Lifetime plan. Your limit resets automatically 12 months from when you first hit it — no action needed, and no extra charge.');
+      } else if (err.reason === 'student_cap_reached') {
+        alert('You\'ve used your 10 metaphors for this month on the Student plan. Your limit resets at the start of your next billing cycle.');
+      } else {
+        showPaywall();
+      }
       return;
     }
     if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err.error || `Server error ${response.status}`); }
