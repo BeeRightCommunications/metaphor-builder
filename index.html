@@ -435,7 +435,7 @@ body.full-mode .quick-only { display: none; }
 </style>
 <div class="lp-wrap">
   <nav>
-    <div class="lp-brand"><span class="lp-mark">B</span> Metaphor Builder</div>
+    <div class="lp-brand"><img src="https://raw.githubusercontent.com/BeeRightCommunications/metaphor-builder/main/BEERIGHTCOMMUNICATIONS_LOGO_PROFILEPIC_FA.jpg" alt="Bee Right Communications" style="width:34px;height:34px;object-fit:contain;border-radius:9px;background:white;"> Metaphor Builder</div>
     <div class="lp-nav-right">
       <button class="lp-nav-login" onclick="showLogin()">Log in</button>
       <button class="lp-btn lp-btn-primary lp-btn-sm" onclick="showSignup()">Start free</button>
@@ -580,14 +580,14 @@ body.full-mode .quick-only { display: none; }
       </div>
       <div class="lp-price-card">
         <div class="lp-price-name">Lifetime</div>
-        <div class="lp-price-amount">A$650</div>
+<div class="lp-price-amount">A$450</div>
         <div class="lp-price-desc">One payment. Up to 1,000 generations a year, every year.</div>
         <button class="lp-btn lp-btn-ghost lp-price-cta" onclick="showSignup()">Start free trial</button>
       </div>
       <div class="lp-price-card">
         <div class="lp-price-name">Student / recent grad</div>
         <div class="lp-price-amount">A$10<span>/mo</span></div>
-        <div class="lp-price-desc">Up to 10 generations a month. Steps up to standard pricing after 12 months.</div>
+<div class="lp-price-desc">Up to 10 generations a month. Steps up to standard pricing after 6 months.</div>
         <button class="lp-btn lp-btn-ghost lp-price-cta" onclick="showSignup()">Start free trial</button>
       </div>
     </div>
@@ -1009,7 +1009,7 @@ body.full-mode .quick-only { display: none; }
 <!-- ── PAYWALL MODAL ── -->
 <div id="paywall-modal">
   <div class="paywall-box">
-    <div class="paywall-icon"><img src="/BEERIGHTCOMMUNICATIONS_LOGO_FA.jpg" alt="Bee Right Communications" style="width:80px;height:80px;object-fit:contain;border-radius:10px;"></div>
+    <div class="paywall-icon"><img src="https://raw.githubusercontent.com/BeeRightCommunications/metaphor-builder/main/BEERIGHTCOMMUNICATIONS_LOGO_PROFILEPIC_FA.jpg" alt="Bee Right Communications" style="width:80px;height:80px;object-fit:contain;border-radius:10px;" onerror="this.style.display='none'"></div>
     <h2>Your free trial has ended</h2>
     <p>You've used your 2 Quick Mode and 1 Full Mode trial generations. Subscribe to keep building metaphors for your clients.</p>
           <div class="paywall-plans">
@@ -1031,7 +1031,7 @@ body.full-mode .quick-only { display: none; }
         <div class="paywall-plan" onclick="handleSubscribe('lifetime')">
           <div class="paywall-plan-header">
             <span class="paywall-plan-name">Lifetime</span>
-            <span class="paywall-plan-price">A$650 once</span>
+<span class="paywall-plan-price">A$450 once</span>
           </div>
           <div class="paywall-plan-desc">Pay once · up to 1,000 generations/year</div>
         </div>
@@ -1041,7 +1041,7 @@ body.full-mode .quick-only { display: none; }
       </div>
       <script>
       function confirmStudentPlan() {
-        const ok = confirm("Student plan: A$10/month, up to 10 metaphors a month.\n\nAfter 12 months this automatically continues at the standard rate (A$24.99/month) — this switch happens automatically, no action needed from you, and we'll bill the new rate at that point.\n\nContinue to checkout?");
+        const ok = confirm("Student plan: A$10/month, up to 10 metaphors a month.\n\nAfter 6 months this automatically continues at the standard rate (A$24.99/month) — this switch happens automatically, no action needed from you, and we'll bill the new rate at that point.\n\nContinue to checkout?");
         if (ok) handleSubscribe('student');
       }
       </script>
