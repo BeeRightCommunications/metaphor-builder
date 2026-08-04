@@ -324,11 +324,292 @@ body.full-mode .quick-only { display: none; }
   #admin-content { max-width: 800px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
 
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
+<!-- LANDING PAGE - shown to signed-out visitors by default. Fully scoped under #landing-page. -->
+<div id="landing-page">
+<style>
+  #landing-page {
+    --lp-plum-deep: #241729;
+    --lp-plum-mid: #33223C;
+    --lp-plum-line: #4C3559;
+    --lp-ivory: #F6EFE4;
+    --lp-lavender: #C1AFCE;
+    --lp-gold: #D9A93B;
+    --lp-gold-bright: #E8C168;
+    --lp-ember: #E8804A;
+    --lp-cream: #FBF6ED;
+    --lp-ink: #2A1E30;
+    --lp-ink-muted: #6B5C74;
+    font-family: 'Karla', -apple-system, sans-serif;
+    background: var(--lp-plum-deep);
+    color: var(--lp-ivory);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  #landing-page h1, #landing-page h2, #landing-page h3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600; line-height: 1.12; letter-spacing: -0.01em; margin: 0;
+  }
+  #landing-page p { margin: 0; }
+  #landing-page a { color: inherit; text-decoration: none; }
+  #landing-page .lp-wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+  #landing-page nav { display: flex; align-items: center; justify-content: space-between; padding: 26px 0; }
+  #landing-page .lp-brand { display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.15rem; }
+  #landing-page .lp-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(150deg, var(--lp-gold-bright), var(--lp-ember)); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--lp-plum-deep); font-weight: 700; }
+  #landing-page .lp-nav-right { display: flex; align-items: center; gap: 22px; font-size: 0.95rem; }
+  #landing-page .lp-nav-login { color: var(--lp-lavender); background: none; border: none; cursor: pointer; font-family: inherit; font-size: inherit; }
+  #landing-page .lp-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 0.95rem; border: 1px solid transparent; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; font-family: 'Karla', sans-serif; }
+  #landing-page .lp-btn-primary { background: var(--lp-gold); color: var(--lp-plum-deep); }
+  #landing-page .lp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(217,169,59,0.28); }
+  #landing-page .lp-btn-ghost { border-color: var(--lp-plum-line); color: var(--lp-ivory); background: none; }
+  #landing-page .lp-btn-ghost:hover { border-color: var(--lp-gold); }
+  #landing-page .lp-btn-sm { padding: 9px 16px; font-size: 0.85rem; }
+  #landing-page .lp-hero { padding: 64px 0 96px; }
+  #landing-page .lp-eyebrow { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lp-gold-bright); font-weight: 700; margin-bottom: 18px; }
+  #landing-page .lp-hero h1 { font-size: clamp(2.3rem, 5vw, 3.4rem); max-width: 15ch; margin-bottom: 22px; }
+  #landing-page .lp-hero-sub { font-size: 1.12rem; color: var(--lp-lavender); max-width: 46ch; margin-bottom: 32px; }
+  #landing-page .lp-hero-cta { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
+  #landing-page .lp-hero-note { font-size: 0.86rem; color: var(--lp-lavender); }
+  #landing-page .lp-transform { margin-top: 64px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 18px; }
+  @media (max-width: 760px) { #landing-page .lp-transform { grid-template-columns: 1fr; } #landing-page .lp-thread { transform: rotate(90deg); width: 40px; margin: 0 auto; } }
+  #landing-page .lp-transform-card { background: var(--lp-plum-mid); border: 1px solid var(--lp-plum-line); border-radius: 18px; padding: 26px 26px 22px; }
+  #landing-page .lp-transform-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+  #landing-page .lp-transform-label.lp-in { color: var(--lp-lavender); }
+  #landing-page .lp-transform-label.lp-out { color: var(--lp-gold-bright); }
+  #landing-page .lp-transform-text { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 400; line-height: 1.4; }
+  #landing-page .lp-transform-text.lp-out { font-style: italic; }
+  #landing-page .lp-thread { width: 64px; height: 2px; background: linear-gradient(90deg, var(--lp-plum-line), var(--lp-gold)); position: relative; }
+  #landing-page .lp-thread::after { content: '→'; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); color: var(--lp-gold); font-size: 1.1rem; }
+  #landing-page .lp-section { padding: 88px 0; border-top: 1px solid var(--lp-plum-line); }
+  #landing-page .lp-section-eyebrow { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lp-gold-bright); font-weight: 700; margin-bottom: 14px; }
+  #landing-page .lp-section-head { max-width: 60ch; margin-bottom: 48px; }
+  #landing-page .lp-section-head h2 { font-size: clamp(1.7rem, 3.4vw, 2.3rem); margin-bottom: 14px; }
+  #landing-page .lp-section-head p { color: var(--lp-lavender); font-size: 1.05rem; }
+  #landing-page .lp-founder-strip { display: flex; gap: 26px; align-items: flex-start; padding: 88px 0; border-top: 1px solid var(--lp-plum-line); }
+  #landing-page .lp-founder-strip .lp-quote-mark { font-family: 'Fraunces', serif; font-size: 3.5rem; color: var(--lp-gold); line-height: 1; }
+  #landing-page .lp-founder-strip p { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 400; line-height: 1.45; max-width: 58ch; color: var(--lp-ivory); }
+  #landing-page .lp-founder-strip .lp-who { margin-top: 16px; font-family: 'Karla', sans-serif; font-size: 0.92rem; color: var(--lp-lavender); font-weight: 600; }
+  #landing-page .lp-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  @media (max-width: 800px) { #landing-page .lp-steps { grid-template-columns: 1fr; } }
+  #landing-page .lp-step-num { font-family: 'Fraunces', serif; font-size: 0.95rem; font-weight: 700; color: var(--lp-plum-deep); background: var(--lp-gold); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+  #landing-page .lp-step h3 { font-size: 1.2rem; margin-bottom: 10px; }
+  #landing-page .lp-step p { color: var(--lp-lavender); font-size: 0.98rem; }
+  #landing-page .lp-panel-cream { background: var(--lp-cream); color: var(--lp-ink); }
+  #landing-page .lp-panel-cream .lp-section-eyebrow { color: var(--lp-ember); }
+  #landing-page .lp-panel-cream .lp-section-head p { color: var(--lp-ink-muted); }
+  #landing-page .lp-feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
+  @media (max-width: 760px) { #landing-page .lp-feature-grid { grid-template-columns: 1fr; } }
+  #landing-page .lp-feature-card { background: #fff; border: 1px solid #EAE0D2; border-radius: 16px; padding: 26px; }
+  #landing-page .lp-feature-card .lp-ficon { width: 40px; height: 40px; border-radius: 10px; background: var(--lp-plum-deep); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--lp-gold-bright); font-family: 'Fraunces', serif; font-weight: 600; }
+  #landing-page .lp-feature-card h3 { font-size: 1.08rem; margin-bottom: 8px; color: var(--lp-ink); }
+  #landing-page .lp-feature-card p { font-size: 0.94rem; color: var(--lp-ink-muted); }
+  #landing-page .lp-day-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+  @media (max-width: 800px) { #landing-page .lp-day-grid { grid-template-columns: 1fr; } }
+  #landing-page .lp-day-card { background: var(--lp-plum-mid); border: 1px solid var(--lp-plum-line); border-radius: 16px; padding: 28px; }
+  #landing-page .lp-day-time { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lp-gold-bright); font-weight: 700; margin-bottom: 14px; }
+  #landing-page .lp-day-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
+  #landing-page .lp-day-card p { color: var(--lp-lavender); font-size: 0.95rem; }
+  #landing-page .lp-pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  @media (max-width: 980px) { #landing-page .lp-pricing-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { #landing-page .lp-pricing-grid { grid-template-columns: 1fr; } }
+  #landing-page .lp-price-card { background: var(--lp-plum-mid); border: 1px solid var(--lp-plum-line); border-radius: 18px; padding: 28px 24px; display: flex; flex-direction: column; }
+  #landing-page .lp-price-card.lp-featured { border-color: var(--lp-gold); box-shadow: 0 0 0 1px var(--lp-gold); }
+  #landing-page .lp-price-badge { align-self: flex-start; background: var(--lp-gold); color: var(--lp-plum-deep); font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; margin-bottom: 14px; }
+  #landing-page .lp-price-name { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+  #landing-page .lp-price-amount { font-family: 'Fraunces', serif; font-size: 1.9rem; font-weight: 600; margin-bottom: 4px; }
+  #landing-page .lp-price-amount span { font-family: 'Karla', sans-serif; font-size: 0.9rem; font-weight: 500; color: var(--lp-lavender); }
+  #landing-page .lp-price-desc { font-size: 0.88rem; color: var(--lp-lavender); margin-bottom: 22px; flex-grow: 1; }
+  #landing-page .lp-price-cta { text-align: center; }
+  #landing-page .lp-final-cta { text-align: center; padding: 100px 0; }
+  #landing-page .lp-final-cta h2 { font-size: clamp(1.9rem, 4vw, 2.6rem); max-width: 20ch; margin: 0 auto 18px; }
+  #landing-page .lp-final-cta p { color: var(--lp-lavender); max-width: 44ch; margin: 0 auto 34px; font-size: 1.05rem; }
+  #landing-page footer { border-top: 1px solid var(--lp-plum-line); padding: 32px 0; }
+  #landing-page footer .lp-wrap { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--lp-lavender); flex-wrap: wrap; gap: 12px; }
+</style>
+<div class="lp-wrap">
+  <nav>
+    <div class="lp-brand"><span class="lp-mark">B</span> Metaphor Builder</div>
+    <div class="lp-nav-right">
+      <button class="lp-nav-login" onclick="showLogin()">Log in</button>
+      <button class="lp-btn lp-btn-primary lp-btn-sm" onclick="showSignup()">Start free</button>
+    </div>
+  </nav>
+</div>
+<header class="lp-hero">
+  <div class="lp-wrap">
+    <div class="lp-eyebrow">For hypnotherapists &amp; practitioners</div>
+    <h1>Turn what your client tells you into the metaphor that helps them.</h1>
+    <p class="lp-hero-sub">Describe your client's situation, in your own words, and get a personalised therapeutic metaphor back — ready to use in-session or to prepare with beforehand.</p>
+    <div class="lp-hero-cta">
+      <button class="lp-btn lp-btn-primary" onclick="showSignup()">Start your free trial →</button>
+      <a class="lp-btn lp-btn-ghost" href="#lp-pricing">See pricing</a>
+    </div>
+    <div class="lp-hero-note">No card required to try it. 2 quick generations + 1 full session, free.</div>
+    <div class="lp-transform">
+      <div class="lp-transform-card">
+        <div class="lp-transform-label lp-in">What you tell it</div>
+        <div class="lp-transform-text">"She's a keen sailor — always fighting the current instead of reading it."</div>
+      </div>
+      <div class="lp-thread"></div>
+      <div class="lp-transform-card">
+        <div class="lp-transform-label lp-out">What you get back</div>
+        <div class="lp-transform-text lp-out">"Think of the sailor you know so well. She used to fight the current with every stroke — until the day she learned to read it, and let it carry her exactly where she needed to go…"</div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="lp-wrap">
+  <div class="lp-founder-strip">
+    <div class="lp-quote-mark">"</div>
+    <div>
+      <p>I built this because I kept doing the same thing at 11pm before a session — turning a client's own words into a metaphor that would actually land for them. This just does that part faster.</p>
+      <div class="lp-who">— Bee Right Communications, Geelong</div>
+    </div>
+  </div>
+</div>
+<section class="lp-section">
+  <div class="lp-wrap">
+    <div class="lp-section-eyebrow">How it works</div>
+    <div class="lp-section-head">
+      <h2>Three steps, not a new workflow.</h2>
+      <p>Nothing to learn beyond what you already do when you prep for a client.</p>
+    </div>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <h3>Describe your client's world</h3>
+        <p>Their interests, their situation, the pattern you want to shift. As much or as little detail as you have.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <h3>Generate the metaphor</h3>
+        <p>Get a conversational version and a hypnotic version, drawn from the specifics you gave it — not a generic template.</p>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <h3>Use it, then save it</h3>
+        <p>Use it live or in prep. Save the ones that work to your own library, so your best material is never lost after one session.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="lp-section lp-panel-cream">
+  <div class="lp-wrap">
+    <div class="lp-section-eyebrow">What you get</div>
+    <div class="lp-section-head">
+      <h2>Built around how a session actually goes.</h2>
+      <p>Two modes for two different moments, and a library that grows with your practice.</p>
+    </div>
+    <div class="lp-feature-grid">
+      <div class="lp-feature-card">
+        <div class="lp-ficon">Q</div>
+        <h3>Quick Mode</h3>
+        <p>For mid-session, on your phone. A short prompt, a fast metaphor, minimal typing while your client is in front of you.</p>
+      </div>
+      <div class="lp-feature-card">
+        <div class="lp-ficon">F</div>
+        <h3>Full Mode</h3>
+        <p>For preparation beforehand. More input fields, more nuance, a metaphor built with the full picture of your client.</p>
+      </div>
+      <div class="lp-feature-card">
+        <div class="lp-ficon">C</div>
+        <h3>Conversational + hypnotic versions</h3>
+        <p>Every metaphor comes in both forms — one for everyday conversation, one written for trance work.</p>
+      </div>
+      <div class="lp-feature-card">
+        <div class="lp-ficon">L</div>
+        <h3>Your own library</h3>
+        <p>Save what works. Build a personal collection of metaphors, organised by client and by theme, over months of practice.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="lp-section">
+  <div class="lp-wrap">
+    <div class="lp-section-eyebrow">Day to day</div>
+    <div class="lp-section-head">
+      <h2>Where this actually fits into your week.</h2>
+      <p>Not another tab to remember — three real moments it slots into.</p>
+    </div>
+    <div class="lp-day-grid">
+      <div class="lp-day-card">
+        <div class="lp-day-time">Before a session</div>
+        <h3>Prep with Full Mode</h3>
+        <p>Ten minutes before your client arrives — turn your notes on them into a metaphor ready to bring in.</p>
+      </div>
+      <div class="lp-day-card">
+        <div class="lp-day-time">During a session</div>
+        <h3>Quick Mode, on your phone</h3>
+        <p>Something comes up you didn't plan for. Add it to your home screen and open it like any other app, right there.</p>
+      </div>
+      <div class="lp-day-card">
+        <div class="lp-day-time">Over time</div>
+        <h3>A library that's actually yours</h3>
+        <p>Every metaphor you save becomes material for the next client with a similar pattern. It compounds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="lp-section" id="lp-pricing">
+  <div class="lp-wrap">
+    <div class="lp-section-eyebrow">Pricing</div>
+    <div class="lp-section-head">
+      <h2>One price. No surprises later.</h2>
+      <p>Free trial to start — 2 quick generations and 1 full session, no card needed.</p>
+    </div>
+    <div class="lp-pricing-grid">
+      <div class="lp-price-card">
+        <div class="lp-price-name">Monthly</div>
+        <div class="lp-price-amount">A$24.99<span>/mo</span></div>
+        <div class="lp-price-desc">Unlimited generations. Cancel any time.</div>
+        <button class="lp-btn lp-btn-ghost lp-price-cta" onclick="showSignup()">Start free trial</button>
+      </div>
+      <div class="lp-price-card lp-featured">
+        <div class="lp-price-badge">Best value</div>
+        <div class="lp-price-name">Annual</div>
+        <div class="lp-price-amount">A$250<span>/yr</span></div>
+        <div class="lp-price-desc">Unlimited generations. About 2 months free versus paying monthly.</div>
+        <button class="lp-btn lp-btn-primary lp-price-cta" onclick="showSignup()">Start free trial</button>
+      </div>
+      <div class="lp-price-card">
+        <div class="lp-price-name">Lifetime</div>
+        <div class="lp-price-amount">A$650</div>
+        <div class="lp-price-desc">One payment. Up to 1,000 generations a year, every year.</div>
+        <button class="lp-btn lp-btn-ghost lp-price-cta" onclick="showSignup()">Start free trial</button>
+      </div>
+      <div class="lp-price-card">
+        <div class="lp-price-name">Student / recent grad</div>
+        <div class="lp-price-amount">A$10<span>/mo</span></div>
+        <div class="lp-price-desc">Up to 10 generations a month. Steps up to standard pricing after 12 months.</div>
+        <button class="lp-btn lp-btn-ghost lp-price-cta" onclick="showSignup()">Start free trial</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="lp-final-cta">
+  <div class="lp-wrap">
+    <h2>Bring the next session's metaphor with you.</h2>
+    <p>Start free. No card needed for the trial, and it takes less time to try than it did to read this page.</p>
+    <button class="lp-btn lp-btn-primary" onclick="showSignup()">Start your free trial →</button>
+  </div>
+</section>
+<footer>
+  <div class="lp-wrap">
+    <div>Metaphor Builder — Bee Right Communications</div>
+    <div>Geelong, Australia</div>
+  </div>
+</footer>
+</div>
+<!-- END LANDING PAGE -->
+
+
 <!-- ── LOGIN SCREEN ── -->
-<div id="login-screen" class="auth-screen">
+<div id="login-screen" class="auth-screen hidden">
   <div class="auth-box">
     <img src="https://raw.githubusercontent.com/BeeRightCommunications/metaphor-builder/main/BEERIGHTCOMMUNICATIONS_LOGO_PROFILEPIC_FA.jpg"
          alt="Bee Right Communications" class="auth-logo"
@@ -805,18 +1086,21 @@ let currentFilter = 'all';
    AUTH
 ══════════════════════════════════ */
 function showLogin() {
+  document.getElementById('landing-page').classList.add('hidden');
   document.getElementById('signup-screen').classList.add('hidden');
   document.getElementById('forgot-screen').classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
 }
 
 function showSignup() {
+  document.getElementById('landing-page').classList.add('hidden');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('forgot-screen').classList.add('hidden');
   document.getElementById('signup-screen').classList.remove('hidden');
 }
 
 function showForgot() {
+  document.getElementById('landing-page').classList.add('hidden');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('signup-screen').classList.add('hidden');
   document.getElementById('forgot-screen').classList.remove('hidden');
@@ -887,11 +1171,14 @@ async function handleSignup() {
 }
 
 function showApp(email) {
+  document.getElementById('landing-page').classList.add('hidden');
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('signup-screen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
   document.getElementById('header-user-email').textContent = email || '';
   if (sessionStorage.getItem('mb_welcome_seen') === '1') document.getElementById('welcome-banner').classList.add('hidden');
+  const pendingOffer = sessionStorage.getItem('mb_pending_offer');
+  if (pendingOffer) { sessionStorage.removeItem('mb_pending_offer'); handleSubscribe(pendingOffer); }
 }
 
 function handleLogout() {
@@ -1098,6 +1385,17 @@ if (urlParams.get('payment') === 'success') {
   window.history.replaceState({}, '', '/');
 } else if (urlParams.get('payment') === 'cancelled') {
   window.history.replaceState({}, '', '/');
+}
+
+// Handle a personal offer link, e.g. https://metaphorbuilder.app/?offer=legacy
+// Used for grandfathering specific people onto the old A$8.99/mo rate.
+const urlOffer = new URLSearchParams(window.location.search).get('offer');
+if (urlOffer === 'legacy') {
+  if (currentSession) {
+    handleSubscribe('legacy');
+  } else {
+    sessionStorage.setItem('mb_pending_offer', 'legacy');
+  }
 }
 
 /* ══════════════════════════════════
