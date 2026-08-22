@@ -675,7 +675,20 @@ body.full-mode .quick-only { display: none; }
     <p class="auth-switch"><button onclick="showLogin()">← Back to login</button></p>
   </div>
 </div>
-
+  <div id="reset-screen" class="auth-screen hidden">
+    <div class="auth-box">
+      <img src="https://raw.githubusercontent.com/BeeRightCommunications/metaphor-builder/main/BEERIGHTCOMMUNICATIONS_LOGO_PROFILEPIC_FA.jpg" alt="Bee Right Communications" class="auth-logo" onerror="this.style.display='none'">
+      <h1>Set a new password</h1>
+            <p class="tagline">Bee Right Communications</p>
+        <div class="auth-divider"></div>
+      <p class="auth-error" id="reset-error"></p>
+      <p style="font-size:0.78rem;color:#2D7A4A;text-align:center;margin-bottom:0.75rem;min-height:1.1em;" id="reset-success"></p>
+      <label for="reset-password">New password</label>
+      <input type="password" id="reset-password" placeholder="At least 8 characters">
+      <button class="auth-btn" id="reset-btn" onclick="handleReset()">Set new password</button>
+    </div>
+  </div>
+          
 <!-- ── MAIN APP ── -->
 <div id="app">
   <header>
