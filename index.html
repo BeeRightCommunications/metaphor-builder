@@ -1398,6 +1398,12 @@ if (urlOffer === 'legacy') {
   } else {
     sessionStorage.setItem('mb_pending_offer', 'legacy');
   }
+} else if (urlOffer === 'course') {
+    if (currentSession) {
+          handleSubscribe('legacy-course');
+    } else {
+          sessionStorage.setItem('mb_pending_offer', 'legacy-course');
+    }
 }
 
 /* ══════════════════════════════════
