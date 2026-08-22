@@ -704,6 +704,10 @@ body.full-mode .quick-only { display: none; }
       <button class="logout-btn" onclick="handleLogout()">Log out</button>
     </div>
   </header>
+  <div class="trial-indicator hidden" id="trial-indicator">
+    <div class="trial-indicator-text">
+      <strong>Free trial</strong> — <span id="trial-remaining-text"></span></div>
+    <button class="trial-upgrade-btn" onclick="showPaywall()">Upgrade</button></div>
 
   <!-- NAV TABS -->
   <div class="nav-tabs">
@@ -949,9 +953,6 @@ body.full-mode .quick-only { display: none; }
         </div>
       </div>
 
-      <div class="trial-indicator hidden" id="trial-indicator">
-  <div class="trial-indicator-text"><strong>Free trial</strong> — <span id="trial-remaining-text"></span></div>
-  <button class="trial-upgrade-btn" onclick="showPaywall()">Upgrade</button>
 </div>
 <button class="generate-btn" id="generateBtn" onclick="generateMetaphors()">✦ Generate metaphors</button>
 
