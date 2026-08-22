@@ -1195,7 +1195,14 @@ function showApp(email) {
   const pendingOffer = sessionStorage.getItem('mb_pending_offer');
   if (pendingOffer) { sessionStorage.removeItem('mb_pending_offer'); handleSubscribe(pendingOffer); }
 }
-
+let recoveryToken = null;
+  function showReset() {
+    document.getElementById('landing-page').classList.add('hidden');
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('signup-screen').classList.add('hidden');
+    document.getElementById('forgot-screen').classList.add('hidden');
+    document.getElementById('reset-screen').classList.remove('hidden');
+  }
 function handleLogout() {
   currentSession = null;
   sessionStorage.removeItem('mb_session');
@@ -1204,10 +1211,43 @@ function handleLogout() {
   document.getElementById('login-password').value = '';
   document.getElementById('login-error').textContent = '';
 }
+  async function handleReset() {
+    const password = document.getElementById('reset-password').value;
+    const errEl = document.getElementById('reset-error');
+    const successEl = document.getElementById('reset-success');
+    const btn = document.getElementById('reset-btn');
+    if (!password || password.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; return; }
+    if (!recoveryToken) { errEl.textContent = 'This reset link has expired. Please request a new one.'; return; }
+    btn.disabled = true; btn.textContent = 'Saving…'; errEl.textContent = ''; successEl.textContent = '';
+    try {
+      const res = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'reset', token: recoveryToken, password }) });
+      if (res.ok) {
+        successEl.textContent = 'Password updated — you can log in now.';
+        btn.textContent = 'Done';
+        setTimeout(() => { showLogin(); }, 1200);
+      } else {
+        const data = await res.json();
+        errEl.textContent = data.error || 'Could not update password.';
+        btn.disabled = false; btn.textContent = 'Set new password';
+      }
+    } catch {
+      errEl.textContent = 'Connection error. Please try again.';
+      btn.disabled = false; btn.textContent = 'Set new password';
+    }
+  }
+
+  (function () {
+    const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+    if (hash.get('type') === 'recovery' && hash.get('access_token')) {
+      recoveryToken = hash.get('access_token');
+      window.history.replaceState({}, '', '/');
+      showReset();
+    }
+  })();
 
 // Auto-login from session storage
 const savedSession = sessionStorage.getItem('mb_session');
-if (savedSession) {
+if (savedSession && !recoveryToken) {
   try {
     currentSession = JSON.parse(savedSession);
     const email = currentSession?.user?.email || '';
