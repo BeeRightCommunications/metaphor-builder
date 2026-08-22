@@ -96,19 +96,14 @@ export default async function handler(req, res) {
             ],
           });
         } else {
-          const subscriptionId = session.subscription;
-          await supabase
-            .from('profiles')
-            .update({
-              plan,
-              subscription_status: 'active',
-              stripe_subscription_id: subscriptionId,
-              plan_expires_at: null,
-            })
-            .eq('id', userId);
+                    const subscriptionId2 = session.subscription;
+                    const updates = { plan, subscription_status: 'active', stripe_subscription_id: subscriptionId2, plan_expires_at: null };
+                    if (plan === 'legacy' || plan === 'legacy-course') { updates.special_offer_used = plan; }
+                    await supabase.from('profiles').update(updates).eq('id', userId);
+                  
         }
-        break;
-      }
+                break;
+        }
 
       case 'customer.subscription.updated': {
         const subscription = event.data.object;
