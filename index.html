@@ -1196,7 +1196,18 @@ function showApp(email) {
   if (sessionStorage.getItem('mb_welcome_seen') === '1') document.getElementById('welcome-banner').classList.add('hidden');
   const pendingOffer = sessionStorage.getItem('mb_pending_offer');
   if (pendingOffer) { sessionStorage.removeItem('mb_pending_offer'); handleSubscribe(pendingOffer); }
+  checkTrialStatus();
 }
+  async function checkTrialStatus() {
+    const token = currentSession?.access_token || session?.access_token;
+    if (!token) return;
+    try {
+      const res = await fetch('/api/trial-status', { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.paid) updateTrialIndicator({ quick: data.quickLeft, full: data.fullLeft });
+    } catch {}
+  }
 let recoveryToken = null;
   function showReset() {
     document.getElementById('landing-page').classList.add('hidden');
