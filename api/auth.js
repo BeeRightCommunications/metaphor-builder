@@ -55,8 +55,8 @@ export default async function handler(req, res) {
 
     if (action === 'forgot') {
       if (!email) return res.status(400).json({ error: 'Email is required' });
-      const response = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
-        method: 'POST',
+            const response = await fetch(`${SUPABASE_URL}/auth/v1/recover?redirect_to=${encodeURIComponent('https://metaphorbuilder.app/')}`, {
+              method: 'POST',
         headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
         body: JSON.stringify({ email })
       });
@@ -67,6 +67,17 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true });
     }
 
+    if (action === 'reset') {
+      if (!token || !password) return res.status(400).json({ error: 'Missing required fields' });
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ password })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) return res.status(400).json({ error: data.error_description || data.msg || 'Could not reset password' });
+      return res.status(200).json({ success: true });
+    }
     return res.status(400).json({ error: 'Unknown action' });
 
   } catch (err) {
