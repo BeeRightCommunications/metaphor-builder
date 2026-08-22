@@ -91,7 +91,7 @@ ERICKSONIAN TECHNIQUES TO APPLY:
 - Curiosity framing: "I wonder how surprised you'll be when..." not direct commands
 - Embedded suggestion: weave suggestions inside wonder/noticing/imagining frames
 - Open-ended language: use vague verbs and unspecified referents where useful so the client fills in their own meaning
-- Displacement framing: present as being about "someone I once knew" or "a friend of mine" to reduce conscious resistance
+- Displacement framing (use sparingly, not as a default): occasionally — not in every metaphor — you may frame part of a metaphor as being about "someone I once knew" or "a friend of mine" to reduce conscious resistance. Vary your openings across metaphors; most should speak to the client directly rather than through a third party
 - Tense blending: move between past and present tense to deepen absorption
 - Universals: sprinkle in universal human experiences to build rapport and recognition
 
@@ -123,7 +123,7 @@ OUTPUT FORMAT — respond in valid JSON only. No markdown. No preamble. No expla
       "distinction": "The key distinction or theme this targets",
       "theme": "One of the transformational themes this maps to",
       "metaphor": "The full conversational metaphor — warm, vivid, written as if speaking directly to the client. Use their world. Make it feel like it was written only for them.",
-      "hypnotic_version": "A hypnotic version using Ericksonian language — curiosity frames, present tense, sensory-rich, slow pacing, embedded suggestions, displacement framing where natural. Or null if not requested.",
+      "hypnotic_version": "A hypnotic version using Ericksonian language — curiosity frames, present tense, sensory-rich, slow pacing, embedded suggestions. Speak directly to the client throughout ('you'/'you might notice') — do NOT use displacement framing ('someone I once knew', 'a friend of mine') here; the hypnotic version must stay personally tailored and directly addressed to this specific client. Or null if not requested.",
       "gordian_note": "Brief note on how this maps to Gordian model concepts. Or null if not requested."
     }
   ],
