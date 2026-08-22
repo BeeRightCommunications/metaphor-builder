@@ -6,6 +6,7 @@ const supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_KEY
     );
+const SPECIAL_OFFER_EXPIRY = new Date('2026-09-25T23:59:59+10:00');
 
 export default async function handler(req, res) {
       if (req.method !== 'POST') {
@@ -43,11 +44,19 @@ export default async function handler(req, res) {
 
   let { data: profile } = await supabase
         .from('profiles')
-        .select('stripe_customer_id')
+            .select('stripe_customer_id, special_offer_used, subscription_status')
         .eq('id', userId)
         .single();
 
   let customerId = profile?.stripe_customer_id;
+      if (plan === 'legacy' || plan === 'legacy-course') {
+            if (new Date() > SPECIAL_OFFER_EXPIRY) {
+                  return res.status(400).json({ error: 'This offer has expired.' });
+            }
+                  if (profile?.special_offer_used && profile?.subscription_status !== 'active') {
+                                return res.status(400).json({ error: 'This offer has already been used on your account. Please choose a standard plan.' });
+                  }
+      }
 
   if (!customerId) {
           const customer = await stripe.customers.create({
