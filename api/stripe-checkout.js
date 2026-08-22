@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       }
 
   const { plan } = req.body;
-      if (!plan || !['monthly', 'annual', 'lifetime', 'student', 'legacy'].includes(plan)) {
+          if (!plan || !['monthly', 'annual', 'lifetime', 'student', 'legacy', 'legacy-course'].includes(plan)) {
               return res.status(400).json({ error: 'Invalid plan' });
       }
 
@@ -36,6 +36,7 @@ export default async function handler(req, res) {
           lifetime: process.env.STRIPE_PRICE_LIFETIME,
           student: process.env.STRIPE_PRICE_STUDENT,
           legacy: process.env.STRIPE_PRICE_LEGACY,
+              'legacy-course': process.env.STRIPE_PRICE_LEGACY,
   };
 
   const priceId = priceMap[plan];
