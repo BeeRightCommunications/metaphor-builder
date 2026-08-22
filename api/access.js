@@ -78,7 +78,7 @@ export async function checkAccess(userId, mode) {
         return { allowed: true, studentRemaining: STUDENT_MONTHLY_CAP - (monthlyGenerations + 1) };
   }
 
-  if ((plan === 'monthly' || plan === 'annual' || plan === 'legacy') && subscription_status === 'active') {
+    if ((plan === 'monthly' || plan === 'annual' || plan === 'legacy' || plan === 'legacy-course') && subscription_status === 'active') {
           const resetAt = new Date(profile.monthly_reset_at);
           const now = new Date();
           const monthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
