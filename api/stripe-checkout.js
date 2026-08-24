@@ -85,14 +85,11 @@ export default async function handler(req, res) {
           },
   };
 
-  if (plan === 'legacy') {
-          sessionParams.subscription_data = {
-                    trial_period_days: 365,
-                    payment_method_collection: 'always',
-                    metadata: { supabase_user_id: userId, plan },
-          };
-  }
-
+    if (plan === 'legacy') {
+                sessionParams.subscription_data = { trial_period_days: 365, metadata: { supabase_user_id: userId, plan } };
+                sessionParams.payment_method_collection = 'always';
+    }
+    
   const session = await stripe.checkout.sessions.create(sessionParams);
 
   return res.status(200).json({ url: session.url });
