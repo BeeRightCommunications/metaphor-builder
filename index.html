@@ -1216,7 +1216,7 @@ function showApp(email) {
     const token = currentSession?.access_token || session?.access_token;
     if (!token) return;
     try {
-      await fetch('/api/activate-bonus-trial', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ plan }) });
+await fetch('/api/trial-status', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ plan }) });
       await checkTrialStatus();
     } catch {}
   }
