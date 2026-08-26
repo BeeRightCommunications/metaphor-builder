@@ -10,7 +10,7 @@ const LIFETIME_ANNUAL_CAP = 1000;
 export async function checkAccess(userId, mode) {
       const { data: profile, error } = await supabase
         .from('profiles')
-        .select('plan, subscription_status, plan_expires_at, trial_quick_used, trial_full_used, monthly_generations, monthly_reset_at, annual_generations, annual_reset_at')
+        .select('plan, subscription_status, plan_expires_at, trial_quick_used, trial_full_used, monthly_generations, monthly_reset_at, annual_generations, annual_reset_at', bonus_trial_active, bonus_trial_plan, bonus_trial_quick_used, bonus_trial_full_used)
         .eq('id', userId)
         .single();
 
@@ -103,25 +103,41 @@ export async function checkAccess(userId, mode) {
   }
 
   if (plan === 'trial' || !plan) {
+          if (profile.bonus_trial_active) {
+                    const bonusQuick = profile.bonus_trial_quick_used ?? 0;
+                    const bonusFull = profile.bonus_trial_full_used ?? 0;
+                    if (mode === 'quick') {
+                                if (bonusQuick >= 1) {
+                                              return { allowed: false, reason: 'trial_quick_exhausted', trialQuickUsed: bonusQuick, trialFullUsed: bonusFull, bonusTrial: true, bonusPlan: profile.bonus_trial_plan };
+                                }
+                                await supabase.from('profiles').update({ bonus_trial_quick_used: bonusQuick + 1 }).eq('id', userId);
+                                return { allowed: true, trialRemaining: { quick: 1 - (bonusQuick + 1), full: 1 - bonusFull } };
+                    }
+                    if (mode === 'full') {
+                                if (bonusFull >= 1) {
+                                              return { allowed: false, reason: 'trial_full_exhausted', trialQuickUsed: bonusQuick, trialFullUsed: bonusFull, bonusTrial: true, bonusPlan: profile.bonus_trial_plan };
+                                }
+                                await supabase.from('profiles').update({ bonus_trial_full_used: bonusFull + 1 }).eq('id', userId);
+                                return { allowed: true, trialRemaining: { quick: 1 - bonusQuick, full: 0 } };
+                    }
+          }
+
           if (mode === 'quick') {
                     if (trial_quick_used >= 2) {
                                 return { allowed: false, reason: 'trial_quick_exhausted', trialQuickUsed: trial_quick_used, trialFullUsed: trial_full_used };
                     }
-                    await supabase.from('profiles')
-                      .update({ trial_quick_used: trial_quick_used + 1 })
-                      .eq('id', userId);
+                    await supabase.from('profiles').update({ trial_quick_used: trial_quick_used + 1 }).eq('id', userId);
                     return { allowed: true, trialRemaining: { quick: 2 - (trial_quick_used + 1), full: 1 - trial_full_used } };
           }
 
-        if (mode === 'full') {
-                  if (trial_full_used >= 1) {
-                              return { allowed: false, reason: 'trial_full_exhausted', trialQuickUsed: trial_quick_used, trialFullUsed: trial_full_used };
-                  }
-                  await supabase.from('profiles')
-                    .update({ trial_full_used: trial_full_used + 1 })
-                    .eq('id', userId);
-                  return { allowed: true, trialRemaining: { quick: 2 - trial_quick_used, full: 0 } };
-        }
+          if (mode === 'full') {
+                    if (trial_full_used >= 1) {
+                                return { allowed: false, reason: 'trial_full_exhausted', trialQuickUsed: trial_quick_used, trialFullUsed: trial_full_used };
+                    }
+                    await supabase.from('profiles').update({ trial_full_used: trial_full_used + 1 }).eq('id', userId);
+                    return { allowed: true, trialRemaining: { quick: 2 - trial_quick_used, full: 0 } };
+          }
+  }
   }
 
   return { allowed: false, reason: 'no_active_subscription' };
