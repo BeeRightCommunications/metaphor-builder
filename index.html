@@ -1218,9 +1218,17 @@ function showApp(email) {
     try {
 await fetch('/api/trial-status', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ plan }) });
       await checkTrialStatus();
-    } catch {}
-  }
-let recoveryToken = null;
+async function openBillingPortal() {
+  const token = currentSession?.access_token || session?.access_token;
+  if (!token) { showLogin(); return; }
+  try {
+    const res = await fetch('/api/billing-portal', { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else alert(data.error || 'Could not open billing portal.');
+  } catch { alert('Connection error. Please try again.'); }
+}
+      let recoveryToken = null;
   function showReset() {
     document.getElementById('landing-page').classList.add('hidden');
     document.getElementById('login-screen').classList.add('hidden');
