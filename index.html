@@ -1196,6 +1196,8 @@ function showApp(email) {
   if (sessionStorage.getItem('mb_welcome_seen') === '1') document.getElementById('welcome-banner').classList.add('hidden');
   const pendingOffer = sessionStorage.getItem('mb_pending_offer');
   if (pendingOffer) { sessionStorage.removeItem('mb_pending_offer'); handleSubscribe(pendingOffer); }
+  const pendingBonusTrial = sessionStorage.getItem('mb_pending_bonus_trial');
+  if (pendingBonusTrial) { sessionStorage.removeItem('mb_pending_bonus_trial'); activateBonusTrial(pendingBonusTrial); }
   checkTrialStatus();
 }
   async function checkTrialStatus() {
@@ -1206,6 +1208,15 @@ function showApp(email) {
       if (!res.ok) return;
       const data = await res.json();
       if (!data.paid) updateTrialIndicator({ quick: data.quickLeft, full: data.fullLeft });
+      window.bonusUpgradePlan = data.bonusPlan || null;
+    } catch {}
+  }
+  async function activateBonusTrial(plan) {
+    const token = currentSession?.access_token || session?.access_token;
+    if (!token) return;
+    try {
+      await fetch('/api/activate-bonus-trial', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ plan }) });
+      await checkTrialStatus();
     } catch {}
   }
 let recoveryToken = null;
@@ -1404,6 +1415,7 @@ async function generateMetaphors() {
 }
 
 function showPaywall() {
+  if (window.bonusUpgradePlan) { handleSubscribe(window.bonusUpgradePlan); return; }
   document.getElementById('paywall-modal').classList.add('visible');
 }
 
@@ -1458,19 +1470,19 @@ if (urlParams.get('payment') === 'success') {
 // Handle a personal offer link, e.g. https://metaphorbuilder.app/?offer=legacy
 // Used for grandfathering specific people onto the old A$8.99/mo rate.
 const urlOffer = new URLSearchParams(window.location.search).get('offer');
-if (urlOffer === 'legacy') {
-  if (currentSession) {
-    handleSubscribe('legacy');
-  } else {
-    sessionStorage.setItem('mb_pending_offer', 'legacy');
+  if (urlOffer === 'legacy') {
+      if (currentSession) {
+            handleSubscribe('legacy');
+      } else {
+            sessionStorage.setItem('mb_pending_offer', 'legacy');
+      }
+  } else if (urlOffer === 'BeeRight26') {
+      if (currentSession) {
+            activateBonusTrial('legacy-course');
+      } else {
+            sessionStorage.setItem('mb_pending_bonus_trial', 'legacy-course');
+      }
   }
-} else if (urlOffer === 'BeeRight26') {
-    if (currentSession) {
-          handleSubscribe('legacy-course');
-    } else {
-          sessionStorage.setItem('mb_pending_offer', 'legacy-course');
-    }
-}
 
 /* ══════════════════════════════════
    RENDER OUTPUT
