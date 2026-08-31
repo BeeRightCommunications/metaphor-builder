@@ -10,7 +10,7 @@ const LIFETIME_ANNUAL_CAP = 1000;
 export async function checkAccess(userId, mode) {
       const { data: profile, error } = await supabase
         .from('profiles')
-        .select('plan, subscription_status, plan_expires_at, trial_quick_used, trial_full_used, monthly_generations, monthly_reset_at, annual_generations, annual_reset_at', bonus_trial_active, bonus_trial_plan, bonus_trial_quick_used, bonus_trial_full_used)
+        .select('plan, subscription_status, plan_expires_at, trial_quick_used, trial_full_used, monthly_generations, monthly_reset_at, annual_generations, annual_reset_at, bonus_trial_active, bonus_trial_plan, bonus_trial_quick_used, bonus_trial_full_used')
         .eq('id', userId)
         .single();
 
